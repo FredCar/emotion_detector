@@ -16,9 +16,13 @@ def code_cleaner(code, nb_lines=0):
     for line in lines:
         # On supprime les sauts de lignes
         if re.match(r"^ *$", line) == None:
-            # On supprimer les lignes de commentaires
+            # On supprime les lignes de commentaires
             if re.match(r"^[\t ]*#.*$", line) == None:
-                # TODO Supprimer les commentaires de fin de lignes
+                # On supprime les commentaires de fin de lignes
+                # TODO Gérer les exception :
+                    # Dièse dans une string "#"
+                    # Dièse échapé \#
+                line = re.sub(r"#.*$", " ", line)
                 # TODO Supprimer les caractères étrangés
                 clean_code += f"{line}\n"
                 nb_lines += 1
@@ -76,7 +80,7 @@ def main():
 
                         # On enregistre le code dans un fichier
                         text = f"{code}\n"
-                        with open("../Data/code_dataset_1.txt", "a") as file:
+                        with open("../Data/code_dataset_test.txt", "a") as file:
                             file.write(text)
         except:
             # print("\n\tERROR =======================")
