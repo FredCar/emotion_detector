@@ -32,12 +32,14 @@ def code_cleaner(code, nb_lines=0):
         if re.match(r"^[\t ]*#.*$", line) != None:
             continue
 
+        # On supprime les espace en fin de ligne
+        line = re.sub(r" +$", "", line)
 
         # On supprime les commentaires de fin de lignes
         # TODO Gérer les exception :
             # Dièse dans une string "#"
             # Dièse échapé \#
-        line = re.sub(r"#.*$", " ", line)
+        line = re.sub(r"#.*$", "", line)
 
         # On supprime les commentaires multilignes """Texte..."""
         if re.match(r"^[ \t]*(\"{3}|'{3}).*$", line) != None:
@@ -112,7 +114,7 @@ def main():
 
                         # On enregistre le code dans un fichier
                         text = f"{code}\n"
-                        with open("../Data/code_dataset_2.txt", "a") as file:
+                        with open("../Data/code_dataset_test.txt", "a") as file:
                             file.write(text)
         except:
             print("\n\tERROR =======================")
