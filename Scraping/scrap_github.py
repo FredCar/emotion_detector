@@ -2,10 +2,12 @@ import time
 import requests
 import traceback
 from github import Github
+
 from utils.functions import *
+from utils import config
 
 
-g = Github("7629f4960da628371d797c312ab3f3e327b45120") # Personal Github token
+g = Github(config.GITHUB_KEY) # Personal Github token
 start_time = time.time()
 
 language = "python" # What language we search on Github

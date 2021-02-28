@@ -27,5 +27,7 @@ ipython_config.py
 ### Directories ###
 Brouillons/
 Data/
+__pycache__/
 
 ### Files ###
+config.py
