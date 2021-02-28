@@ -1,4 +1,5 @@
 import time
+import argparse
 import requests
 import traceback
 from github import Github
@@ -12,7 +13,27 @@ start_time = time.time()
 
 language = "python" # What language we search on Github
 file_name = "code_dataset_test.txt"
-scrap_functions = True
+
+
+# Argparse
+parser = argparse.ArgumentParser(description="Scrap code from Github")
+parser.add_argument(
+    "-f", "--function", 
+    help="extract functions from code", 
+    action="store_true",
+    default=False
+)
+parser.add_argument(
+    "-e", "--error", 
+    help="display error stacks", 
+    action='store_const',
+    const=None,
+    default=0
+)
+args = parser.parse_args()
+
+error_stack = args.error
+scrap_functions = args.function
 
 
 def main():
@@ -63,8 +84,8 @@ def main():
                             with open(f"../Data/{file_name}", "w") as file:
                                 file.write(text)
         except:
-            print("\n\tERROR =======================")
-            traceback.print_exc()
+            print("\n\n\tERROR =======================")
+            traceback.print_exc(limit=error_stack)
             print("\t=============================\n")
             break
 
