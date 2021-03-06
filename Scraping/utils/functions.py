@@ -63,11 +63,13 @@ def extract_functions(code, nb_functions=0):
     lines = code.splitlines()
     functions = ""
     is_funct = False
-    
+
     for line in lines:
         if is_funct:
             print(line)
+            is_funct = False
             # TODO la logique
+            start_line = re.sub(r"", "", line)
 
         if re.match(r"^[ \t]*def.*$", line) != None:
             functions += f"{line}\n"
