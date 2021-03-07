@@ -62,21 +62,28 @@ def extract_functions(code, nb_functions=0):
 
     lines = code.splitlines()
     functions = ""
-    is_funct = False
+    is_funct = 0
+    nb_spaces = 0
 
     for line in lines:
         if is_funct:
-            print(line)
-            is_funct = False
-            # TODO la logique
-            start_line = re.sub(r"", "", line)
+            if is_funct == 1:
+                nb_spaces = len(line) - len(line.lstrip(" "))
 
-        if re.match(r"^[ \t]*def.*$", line) != None:
+            if len(line) - len(line.lstrip(" ")) >= nb_spaces:
+                functions += f"{line}\n"
+            else:
+                functions += "\n" # TODO Ne fonctionne pas !!
+                is_funct = 0
+
+        # TODO Pourquoi les class ne sont pas filtrées ???
+        # TODO Filtrer les __init__
+
+
+        elif re.match(r"^[ \t]*def.*$", line) != None:
             functions += f"{line}\n"
-            is_funct = True
-            # TODO Compter les espaces ou les tabulations
-            print("\n================================")
-            print(line)
+            nb_functions += 1
+            is_funct = 1
 
     return functions, nb_functions
 

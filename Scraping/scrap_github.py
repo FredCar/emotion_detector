@@ -44,6 +44,7 @@ def main():
 
     nb_script = 0
     nb_lines = 0
+    nb_functions = 0
     for repository in repositories:
         
         try:
@@ -73,15 +74,14 @@ def main():
                         code, nb_lines = code_cleaner(code, nb_lines)
 
                         if scrap_functions:
-                            # TODO (WIP)
-                            functions = extract_functions(code)
-                            text = f"{code}\n"
-                            with open(f"../Data/functions/{file_name}", "w") as file:
+                            functions, nb_functions = extract_functions(code, nb_functions)
+                            text = f"{functions}\n"
+                            with open(f"../Data/functions/{file_name}", "a") as file:
                                 file.write(text)
                         else:
                             # On enregistre le code dans un fichier
                             text = f"{code}\n"
-                            with open(f"../Data/{file_name}", "w") as file:
+                            with open(f"../Data/{file_name}", "a") as file:
                                 file.write(text)
         except:
             print("\n\n\tERROR =======================")
@@ -90,7 +90,10 @@ def main():
             break
 
     print(f"\t>>> {nb_script} .py files have been parsed")
-    print(f"\t>>> {nb_lines} lines of code have been saved")
+    if scrap_functions:
+        print(f"\t>>> {nb_functions} functions have been saved")
+    else:
+        print(f"\t>>> {nb_lines} lines of code have been saved")
     exec_time = round(time.time()-start_time)
     exec_time = timer(exec_time)
     print(f"End of scraping in {exec_time}\n\n")
