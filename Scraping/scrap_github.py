@@ -12,6 +12,7 @@ g = Github(config.GITHUB_KEY) # Personal Github token
 start_time = time.time()
 
 language = "python" # What language we search on Github
+path = "../Data/"
 file_name = "code_dataset_test.txt"
 
 
@@ -34,6 +35,9 @@ args = parser.parse_args()
 
 error_stack = args.error
 scrap_functions = args.function
+
+if scrap_functions:
+    path += "functions/"
 
 
 def main():
@@ -74,14 +78,14 @@ def main():
                         code, nb_lines = code_cleaner(code, nb_lines)
 
                         if scrap_functions:
+                            # On enregistre les fonctions dans un fichier
                             functions, nb_functions = extract_functions(code, nb_functions)
                             text = f"{functions}\n"
-                            with open(f"../Data/functions/{file_name}", "a") as file:
-                                file.write(text)
                         else:
                             # On enregistre le code dans un fichier
                             text = f"{code}\n"
-                            with open(f"../Data/{file_name}", "a") as file:
+
+                        with open(path + file_name, "a") as file:
                                 file.write(text)
         except:
             print("\n\n\tERROR =======================")
