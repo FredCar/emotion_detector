@@ -67,9 +67,12 @@ def extract_functions(code, nb_functions=0):
 
     for line in lines:
         if is_funct:
+            # Si on est au début d'une fonction
             if is_funct == 1:
+                # On calcule le nombre d'espaces
                 nb_spaces = len(line) - len(line.lstrip(" "))
 
+            # Si le nombre d'espaces n'est pas inférieur, on est encore dans la fonction
             if (len(line) - len(line.lstrip(" "))) >= nb_spaces:
                 functions += f"{line}\n"
                 is_funct += 1
@@ -78,12 +81,14 @@ def extract_functions(code, nb_functions=0):
                 is_funct = 0
                 nb_spaces = 0
 
-        # TODO Filtrer les __init__
 
+        # On repère les fonctions
         elif re.match(r"^[ \t]*def.*$", line) != None:
-            functions += f"{line}\n"
-            nb_functions += 1
-            is_funct = 1
+            # On filtrer les __init__
+            if re.search(r"def __init__\(self", line) == None:
+                functions += f"{line}\n"
+                nb_functions += 1
+                is_funct = 1
 
     return functions, nb_functions
 
