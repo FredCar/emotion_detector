@@ -70,15 +70,15 @@ def extract_functions(code, nb_functions=0):
             if is_funct == 1:
                 nb_spaces = len(line) - len(line.lstrip(" "))
 
-            if len(line) - len(line.lstrip(" ")) >= nb_spaces:
+            if (len(line) - len(line.lstrip(" "))) >= nb_spaces:
                 functions += f"{line}\n"
+                is_funct += 1
             else:
-                functions += "\n" # TODO Ne fonctionne pas !!
+                functions += "\n"
                 is_funct = 0
+                nb_spaces = 0
 
-        # TODO Pourquoi les class ne sont pas filtrées ???
         # TODO Filtrer les __init__
-
 
         elif re.match(r"^[ \t]*def.*$", line) != None:
             functions += f"{line}\n"
