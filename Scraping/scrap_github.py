@@ -12,7 +12,7 @@ g = Github(config.GITHUB_KEY) # Personal Github token
 start_time = time.time()
 
 language = "python" # What language we search on Github
-path = "../Data/"
+path = "../Data/" # Path to the directory where the file will be saved
 file_name = "code_dataset_test.txt"
 
 
@@ -66,11 +66,11 @@ def main():
                     
                 # Si c'est un fichier, on regarde l'url du code
                 else:
-                    nb_script += 1
                     url = file_content.download_url
                     
                     # Si c'est un fichier Python, 
                     if url[-2:] == "py" and url[-11:] != "__init__.py":
+                        nb_script += 1
                         # On récupère le code
                         code = requests.get(url).text
 
@@ -95,9 +95,9 @@ def main():
 
     print(f"\t>>> {nb_script} .py files have been parsed")
     if scrap_functions:
-        print(f"\t>>> {nb_functions} functions have been saved")
+        print(f"\t>>> {nb_functions} functions have been saved to {path + file_name}")
     else:
-        print(f"\t>>> {nb_lines} lines of code have been saved")
+        print(f"\t>>> {nb_lines} lines of code have been savedto {path + file_name}")
     exec_time = round(time.time()-start_time)
     exec_time = timer(exec_time)
     print(f"End of scraping in {exec_time}\n\n")
