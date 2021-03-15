@@ -38,6 +38,7 @@ scrap_functions = args.function
 
 if scrap_functions:
     path += "functions/"
+    file_name = "func_dataset_test.txt"
 
 
 def main():
