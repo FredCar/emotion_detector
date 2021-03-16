@@ -4,4 +4,6 @@ services:
   app_flask:
     build: API/.
     ports:
-      - 5000:5000 
+      - 5000:5000
+    volumes:
+      - /home/fred/Formation/Certifs/Chef_d_oeuvre/code_generator/API/api.py:/src/api.py
