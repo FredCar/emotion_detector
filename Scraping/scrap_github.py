@@ -16,6 +16,8 @@ path = "../Data/" # Path to the directory where the file will be saved
 file_name = "code_dataset_test.txt"
 
 
+# TODO Ajouter la possibilité d'extraire uniquement des scripts de test
+
 # Argparse
 parser = argparse.ArgumentParser(description="Scrap code from Github")
 parser.add_argument(
