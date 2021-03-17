@@ -20,17 +20,25 @@ services:
       - /home/fred/Formation/Certifs/Chef_d_oeuvre/code_generator/Front/:/src/
 
   database:
-    image: mysql
+    image: mariadb
     environment:
       MYSQL_ROOT_PASSWORD: toor
       MYSQL_USER: code_generator
       MYSQL_PASSWORD: c0d3_g3n3rat0r
+      MYSQL_DATABASE: code_generator_db
     ports:
       - 3307:3306
     networks:
       - code_generator_network
     volumes:
      - db_code_generator:/var/lib/mysql
+    
+  adminer:
+    image: adminer
+    ports:
+      - 8081:8080
+    networks:
+      - code_generator_network
 
 
 networks:
