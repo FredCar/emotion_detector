@@ -5,6 +5,7 @@ import tensorflow as tf
 from transformers import TFBertForSequenceClassification
 from transformers import BertTokenizer
 from utils import config
+from utils.functions import *
 
 
 app = Flask(__name__)
@@ -27,14 +28,7 @@ class User(db.Model):
         return f'<User {self.username}>'
 
 
-model_save_path = ""
-num_labels = 2
-loss = tf.keras.losses.SparseCategoricalCrossentropy(from_logits=True)
-optimizer = tf.keras.optimizers.Adam(learning_rate=2e-5,epsilon=1e-08)
-metric = tf.keras.metrics.SparseCategoricalAccuracy('accuracy')
-model = TFBertForSequenceClassification.from_pretrained('bert-base-uncased',num_labels=num_labels)
-model.compile(loss=loss,optimizer=optimizer, metrics=[metric])
-model.load_weights(model_save_path)
+model = load_model()
 
 
 @app.route("/", methods=["GET", "POST"])
