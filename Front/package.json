@@ -1,5 +1,5 @@
 {
-  "name": "code-generator",
+  "name": "emotion-detector",
   "version": "0.1.0",
   "private": true,
   "dependencies": {

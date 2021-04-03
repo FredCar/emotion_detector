@@ -6,44 +6,44 @@ services:
     ports:
       - 5000:5000
     networks:
-      - code_generator_network
+      - emotion_detector_network
     volumes:
-      - /home/fred/Formation/Certifs/Chef_d_oeuvre/code_generator/API/api.py:/src/api.py
+      - /home/fred/Formation/Certifs/detecteur_emotion/emotion_detector/API/api.py:/src/api.py
 
   front:
     build: Front/.
     ports:
       - 3000:3000
     networks:
-      - code_generator_network
+      - emotion_detector_network
     volumes:
-      - /home/fred/Formation/Certifs/Chef_d_oeuvre/code_generator/Front/:/src/
+      - /home/fred/Formation/Certifs/detecteur_emotion/emotion_detector/Front/:/src/
 
   database:
     image: mariadb
     environment:
       MYSQL_ROOT_PASSWORD: toor
-      MYSQL_USER: code_generator
-      MYSQL_PASSWORD: c0d3_g3n3rat0r
-      MYSQL_DATABASE: code_generator_db
+      MYSQL_USER: emotion_detector
+      MYSQL_PASSWORD: emotion_detector
+      MYSQL_DATABASE: emotion_detector_db
     ports:
       - 3307:3306
     networks:
-      - code_generator_network
+      - emotion_detector_network
     volumes:
-     - db_code_generator:/var/lib/mysql
+     - db_emotion_detector:/var/lib/mysql
     
   adminer:
     image: adminer
     ports:
       - 8081:8080
     networks:
-      - code_generator_network
+      - emotion_detector_network
 
 
 networks:
-  code_generator_network:
+  emotion_detector_network:
 
 
 volumes:
-  db_code_generator:
+  db_emotion_detector:
