@@ -17,7 +17,7 @@ services:
     networks:
       - emotion_detector_network
     volumes:
-      - /home/fred/Formation/Certifs/detecteur_emotion/emotion_detector/Front/:/src/
+      - /home/fred/Formation/Certifs/detecteur_emotion/emotion_detector/Front/:/app/
 
   database:
     image: mariadb
