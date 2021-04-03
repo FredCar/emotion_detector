@@ -1,4 +1,4 @@
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify, json
 from flask_sqlalchemy import SQLAlchemy
 from flask_cors import CORS, cross_origin
 import tensorflow as tf
@@ -28,7 +28,8 @@ class User(db.Model):
         return f'<User {self.username}>'
 
 
-model = load_model()
+tokenizer = Tokenizer()
+model = Model()
 
 
 @app.route("/", methods=["GET", "POST"])
@@ -39,7 +40,17 @@ def home():
         return {"message": ">>> GET <<<"}
 
     if request.method == "POST":
-        return {"message": ">>> POST <<<"}
+        res = request.data
+        res = json.loads(res)
+        sents = res["text"].split(".")
+        tokens_list = tokenizer.tokenize(sents)
+
+        preds_list = []
+        for token in tokens_list:
+            pred = model.predict(token)
+            preds_list.append(pred)
+        # pred = model.predict([val_inp,val_mask],batch_size=32)
+        return {"message": f">>> {' / '.join(sents)} //// {preds_list} <<<"}
 
 
 
