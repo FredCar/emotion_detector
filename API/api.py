@@ -1,4 +1,4 @@
-from flask import Flask, jsonify
+from flask import Flask, request, jsonify
 from flask_sqlalchemy import SQLAlchemy
 from flask_cors import CORS, cross_origin
 from utils import config
@@ -24,11 +24,16 @@ class User(db.Model):
         return f'<User {self.username}>'
 
 
-@app.route("/", methods=["GET"])
+@app.route("/", methods=["GET", "POST"])
 @cross_origin()
 def home():
-    res = User.query.all()
-    return {"message": str(res[0])}
+    if request.method == "GET":
+        # res = User.query.all()
+        return {"message": ">>> GET <<<"}
+
+    if request.method == "POST":
+        return {"message": ">>> POST <<<"}
+
 
 
 if __name__ == "__main__":
