@@ -49,8 +49,10 @@ def home():
         for token in tokens_list:
             pred = model.predict(token)
             preds_list.append(pred)
-        # pred = model.predict([val_inp,val_mask],batch_size=32)
-        return {"message": f">>> {' / '.join(sents)} //// {preds_list} <<<"}
+
+        result = model.parse_preds(preds_list)
+
+        return {"message": f">>> {result} <<<"}
 
 
 

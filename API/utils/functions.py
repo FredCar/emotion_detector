@@ -30,6 +30,15 @@ class Tokenizer:
 class Model:
     def __init__(self):
         self.model = self.load_model()
+        self.emotions = {
+            'tristesse': '0',
+            'colère': '1',
+            'amour': '2',
+            'surprise': '3',
+            'peur': '4',
+            'joie': '5',
+        }
+        self.emotions_reverse = {k : v for v, k in self.emotions.items()}
 
 
     def load_model(self):
@@ -54,4 +63,13 @@ class Model:
         pred = self.model.predict([token["input_ids"], token["attention_mask"]], batch_size=32)
         return pred
 
+    
+    def parse_preds(self, preds_list):
+        results_list = []
+        for pred in preds_list:
+            parsed = pred["logits"].argmax(axis=1)
+            emotion_pred = self.emotions_reverse[str(parsed[0])]
+            results_list.append(emotion_pred)
+        result = max(results_list, key = results_list.count)
 
+        return result
