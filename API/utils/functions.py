@@ -33,7 +33,7 @@ class Model:
 
 
     def load_model(self):
-        model_save_path = "../model/bert_model.h5"
+        model_save_path = "/src/model/bert_model.h5"
         num_labels = 6
         loss = tf.keras.losses.SparseCategoricalCrossentropy(from_logits=True)
         optimizer = tf.keras.optimizers.Adam(learning_rate=2e-5,epsilon=1e-08)
@@ -41,8 +41,7 @@ class Model:
         
         model = TFBertForSequenceClassification.from_pretrained('bert-base-uncased',num_labels=num_labels)
         model.compile(loss=loss,optimizer=optimizer, metrics=[metric])
-        # BUG
-        # model.load_weights(model_save_path)
+        model.load_weights(model_save_path)
 
         print("============================")
         print("\t MODEL STARTED")
