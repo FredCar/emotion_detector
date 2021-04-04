@@ -1,15 +1,22 @@
 import tensorflow as tf
 from transformers import TFBertForSequenceClassification
 from transformers import BertTokenizer
+from googletrans import Translator
 
 
-class Tokenizer:
+class Preprocess:
     def __init__(self):
+        self.translator = Translator(raise_exception=False)
         self.tokenizer = BertTokenizer.from_pretrained('bert-base-uncased', do_lower_case=True)
 
-        print("============================")
+        print("==================================")
         print("\t TOKENIZER LOADED")
-        print("============================")
+        print("==================================")
+
+
+    def translate(self, sent):
+        translated = self.translator.translate(sent, dest="en").text
+        return translated
 
 
     def tokenize(self, sents):
@@ -29,7 +36,7 @@ class Tokenizer:
 
 class Model:
     def __init__(self):
-        self.model = self.load_model()
+        self.model = self.__load_model()
         self.emotions = {
             'tristesse': '0',
             'colère': '1',
@@ -41,7 +48,7 @@ class Model:
         self.emotions_reverse = {k : v for v, k in self.emotions.items()}
 
 
-    def load_model(self):
+    def __load_model(self):
         model_save_path = "/src/model/bert_model.h5"
         num_labels = 6
         loss = tf.keras.losses.SparseCategoricalCrossentropy(from_logits=True)
@@ -52,9 +59,9 @@ class Model:
         model.compile(loss=loss,optimizer=optimizer, metrics=[metric])
         model.load_weights(model_save_path)
 
-        print("============================")
-        print("\t MODEL STARTED")
-        print("============================")
+        print("==================================")
+        print("\t  MODEL STARTED")
+        print("==================================")
 
         return model
 

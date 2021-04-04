@@ -53,7 +53,7 @@ const SubmitForm = ((props) => {
                     placeholder="Entrez votre texte içi..." 
                     cols="50" 
                     rows="5"
-                    wrap="off"
+                    wrap="on"
                     onChange={handleChange}
                 >
                 </textArea>

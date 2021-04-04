@@ -1,3 +1,4 @@
+import re
 from flask import Flask, request, jsonify, json
 from flask_sqlalchemy import SQLAlchemy
 from flask_cors import CORS, cross_origin
@@ -27,8 +28,7 @@ class User(db.Model):
     def __repr__(self):
         return f'<User {self.username}>'
 
-
-tokenizer = Tokenizer()
+preprocess = Preprocess()
 model = Model()
 
 
@@ -39,11 +39,12 @@ def home():
         # res = User.query.all()
         return {"message": ">>> GET <<<"}
 
-    if request.method == "POST":
+    if request.method == "POST":        
         res = request.data
         res = json.loads(res)
-        sents = res["text"].split(".")
-        tokens_list = tokenizer.tokenize(sents)
+        res = preprocess.translate(res["text"])
+        sents = re.split(r"[.|;|!|\?|\n]", res)
+        tokens_list = preprocess.tokenize(sents)
 
         preds_list = []
         for token in tokens_list:
@@ -52,7 +53,7 @@ def home():
 
         result = model.parse_preds(preds_list)
 
-        return {"message": f">>> {result} <<<"}
+        return {"message": f">>> {result} - {res} - {sents} <<<"}
 
 
 
