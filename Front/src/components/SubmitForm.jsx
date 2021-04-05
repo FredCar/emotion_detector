@@ -1,11 +1,13 @@
 import React from "react";
 import { useState, useEffect } from "react";
+import { useHistory } from "react-router-dom";
 import Routing from "../Routing";
 import axios from 'axios';
 
 const SubmitForm = ((props) => {
     const [response, setResponse] = useState();
     const [text, setText] = useState();
+    const history = useHistory();
 
 
     const fetcher = (() => {
@@ -28,6 +30,7 @@ const SubmitForm = ((props) => {
         axios.post(url, data)
         .then(({data}) => {
             setResponse(data.message)
+            history.push("/result")
             console.log("data", data)
         })
         .catch((error) => {

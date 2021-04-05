@@ -11,7 +11,7 @@ function App() {
         <Menu />
         <Switch>
           <Route exact path="/" component={SubmitForm} />
-          <Route exact path="/predict" component={Result} />
+          <Route exact path="/result" component={Result} />
         </Switch>
       </div>
     </HashRouter>
