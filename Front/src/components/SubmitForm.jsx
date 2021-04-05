@@ -20,12 +20,12 @@ const SubmitForm = ((props) => {
 
 
     const handleSubmit = (() => {
-        const url = `${Routing.baseUrl}/predict`
+        // const url = `${Routing.baseUrl}/predict`
         const data = {
             "text" : text,
         }
 
-        axios.post(url, data)
+        axios.post(Routing.baseUrl, data)
         .then((resp) => {
             setResponse(resp.data.message)
             console.log("resp", resp)
@@ -50,14 +50,14 @@ const SubmitForm = ((props) => {
         <>
             <form>
 
-                <textArea 
+                <textarea 
                     placeholder="Entrez votre texte içi..." 
                     cols="50" 
                     rows="5"
                     wrap="on"
                     onChange={handleChange}
                 >
-                </textArea>
+                </textarea>
 
                 <br />
                 <br />
