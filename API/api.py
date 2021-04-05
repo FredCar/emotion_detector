@@ -32,29 +32,33 @@ preprocess = Preprocess()
 model = Model()
 
 
-@app.route("/", methods=["GET", "POST"])
+@app.route("/", methods=["GET"])
 @cross_origin()
 def home():
     if request.method == "GET":
         # res = User.query.all()
         return {"message": ">>> GET <<<"}
 
+    
+
+@app.route("/predict", methods=["POST"])
+@cross_origin()
+def predict():
     if request.method == "POST":        
         res = request.data
         res = json.loads(res)
         res = preprocess.translate(res["text"])
         sents = re.split(r"[.|;|!|\?|\n]", res)
+
         tokens_list = preprocess.tokenize(sents)
+        preds_list = model.predict(tokens_list)
 
-        preds_list = []
-        for token in tokens_list:
-            pred = model.predict(token)
-            preds_list.append(pred)
+        best_result = model.best_result(preds_list)
+        all_results = model.all_results(preds_list)
 
-        result = model.parse_preds(preds_list)
+        return {"message": f">>> {best_result} - - - - - {res} - - - - - {sents} - - - - - {all_results} <<<"}
 
-        return {"message": f">>> {result} - {res} - {sents} <<<"}
-
+    return {"message": "Erreur"}
 
 
 if __name__ == "__main__":

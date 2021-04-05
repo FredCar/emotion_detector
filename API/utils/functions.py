@@ -66,17 +66,39 @@ class Model:
         return model
 
 
-    def predict(self, token):
-        pred = self.model.predict([token["input_ids"], token["attention_mask"]], batch_size=32)
-        return pred
+    def predict(self, tokens_list):
+        preds_list = []
+        for token in tokens_list:
+            pred = self.model.predict([token["input_ids"], token["attention_mask"]], batch_size=32)
+            # TODO Comprendre ce qu'est la 2eme liste retournée dans "logits"
+            preds_list.append(pred["logits"][0])
+            
+        return preds_list
 
     
-    def parse_preds(self, preds_list):
+    def best_result(self, preds_list):
         results_list = []
         for pred in preds_list:
-            parsed = pred["logits"].argmax(axis=1)
-            emotion_pred = self.emotions_reverse[str(parsed[0])]
+            parsed = pred.argmax()
+            emotion_pred = self.emotions_reverse[str(parsed)]
             results_list.append(emotion_pred)
-        result = max(results_list, key = results_list.count)
+        best_result = max(results_list, key = results_list.count)
 
-        return result
+        return best_result
+
+    
+    def all_results(self, preds_list):
+        all_results = {}
+        for emotion in self.emotions.keys():
+            all_results[emotion] = 0
+
+        # for pred in preds_list:
+        #     all_results["tristesse"] += pred["logits"][0][0]
+        #     all_results["colère"] += pred["logits"][0][1]
+        #     all_results["amour"] += pred["logits"][0][2]
+        #     all_results["surprise"] += pred["logits"][0][3]
+        #     all_results["peur"] += pred["logits"][0][4]
+        #     all_results["joie"] += pred["logits"][0][5]
+
+
+        return all_results

@@ -20,11 +20,12 @@ const SubmitForm = ((props) => {
 
 
     const handleSubmit = (() => {
+        const url = `${Routing.baseUrl}/predict`
         const data = {
             "text" : text,
         }
 
-        axios.post(Routing.baseUrl, data)
+        axios.post(url, data)
         .then((resp) => {
             setResponse(resp.data.message)
             console.log("resp", resp)
