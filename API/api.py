@@ -44,10 +44,10 @@ def home():
 @cross_origin()
 def predict():
     if request.method == "POST": 
-        res = request.data
-        res = json.loads(res)
-        res = preprocess.translate(res["text"])
-        sents = re.split(r"[.|;|!|\?|\n]", res)
+        original_text = request.data
+        original_text = json.loads(original_text)
+        translated_text = preprocess.translate(original_text["text"])
+        sents = re.split(r"[.|;|!|\?|\n]", translated_text)
 
         tokens_list = preprocess.tokenize(sents)
         preds_list = model.predict(tokens_list)
@@ -55,9 +55,17 @@ def predict():
         best_result = model.best_result(preds_list)
         all_results = model.all_results(preds_list)
 
-        return {"message": f">>> {best_result} - - - - - {res} - - - - - {sents} - - - - - {all_results} <<<"}
+        data = {
+            "best_result": str(best_result),
+            "original_text": str(original_text["text"]),
+            "translated_text": str(translated_text),
+            "sents": sents,
+            "all_results": all_results,
+        }
 
-    return {"message": "Erreur"}
+        return {"data": data}
+
+    return {"data": "Erreur"}
 
 
 if __name__ == "__main__":

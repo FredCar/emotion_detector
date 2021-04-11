@@ -5,7 +5,6 @@ import Routing from "../Routing";
 import axios from 'axios';
 
 const SubmitForm = ((props) => {
-    // const sessionStorage = window.sessionStorage;
     const [text, setText] = useState();
     const history = useHistory();
     
@@ -18,7 +17,7 @@ const SubmitForm = ((props) => {
 
         axios.post(url, data)
         .then(({data}) => {
-            sessionStorage.setItem("result", data.message)
+            sessionStorage.setItem("data", JSON.stringify(data.data))
             history.push("/result")
         })
         .catch((error) => {

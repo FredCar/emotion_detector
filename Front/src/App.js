@@ -9,6 +9,7 @@ function App() {
     <HashRouter>
       <div className="App">
         <Menu />
+        <br />
         <Switch>
           <Route exact path="/" component={SubmitForm} />
           <Route exact path="/result" component={Result} />
