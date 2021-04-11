@@ -5,21 +5,10 @@ import Routing from "../Routing";
 import axios from 'axios';
 
 const SubmitForm = ((props) => {
-    const [response, setResponse] = useState();
+    // const sessionStorage = window.sessionStorage;
     const [text, setText] = useState();
     const history = useHistory();
-
-
-    const fetcher = (() => {
-            axios.get(Routing.baseUrl)
-            .then((resp) => {
-                setResponse(resp.data.message)
-            })
-            .catch((error) => {
-                console.error(error)
-            })
-    });
-
+    
 
     const handleSubmit = (() => {
         let url = `${Routing.baseUrl}/predict`
@@ -29,9 +18,8 @@ const SubmitForm = ((props) => {
 
         axios.post(url, data)
         .then(({data}) => {
-            setResponse(data.message)
+            sessionStorage.setItem("result", data.message)
             history.push("/result")
-            console.log("data", data)
         })
         .catch((error) => {
             console.error(error)
@@ -42,11 +30,6 @@ const SubmitForm = ((props) => {
     const handleChange = ((event) => {
         setText(event.target.value)
     });
-
-
-    useEffect(() => {
-        fetcher();
-    }, [])
 
 
     return (
@@ -68,10 +51,6 @@ const SubmitForm = ((props) => {
                     onClick={handleSubmit}
                 />
             </form>
-
-            <h3>REPONSE :</h3>
-            <p>{response}</p>
-
         </>
     )
 });
