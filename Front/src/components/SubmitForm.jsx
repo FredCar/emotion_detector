@@ -1,8 +1,9 @@
 import React from "react";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { useHistory } from "react-router-dom";
 import Routing from "../Routing";
 import axios from 'axios';
+import Button from '@material-ui/core/Button';
 
 const SubmitForm = ((props) => {
     const [text, setText] = useState();
@@ -44,11 +45,12 @@ const SubmitForm = ((props) => {
                 </textarea>
                 <br />
                 <br />
-                <input 
-                    type="button" 
-                    value="Envoyer" 
+                <Button 
+                    variant="contained"
                     onClick={handleSubmit}
-                />
+                >
+                    Analyser
+                </Button>
             </form>
         </>
     )

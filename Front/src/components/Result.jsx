@@ -23,11 +23,13 @@ const BestResult = ({bestResult}) => {
         case "tristesse":
             emoji = "emoji_sadness.png"
             break
+        default:
+            break
 
     }
     return (
         <>
-            <img src={`images/${emoji}`}  />
+            <img src={`images/${emoji}`} alt={emoji}  />
         </>
     )
 }
