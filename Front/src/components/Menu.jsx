@@ -17,7 +17,8 @@ const Menu = ((props) => {
                     </ul>
                 </div>
             </nav>
-            <h1>Welcome to the Emotions Detector.</h1>
+            <br />
+            <br />
         </>
     )
 });
