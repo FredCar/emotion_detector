@@ -1,9 +1,19 @@
 import React from "react";
+import { makeStyles } from '@material-ui/core/styles';
+
+const useStyles = makeStyles({
+    emoji: {
+        width: 100,
+        height: "auto",
+    },
+})
 
 const BestResult = ({bestResult}) => {
-    console.log("BestResult", bestResult)
+    const classes = useStyles();
     let emoji = ""
 
+    console.log("BestResult", bestResult)
+    
     switch (bestResult) {
         case "amour":
             emoji = "emoji_love.png"
@@ -29,7 +39,7 @@ const BestResult = ({bestResult}) => {
     }
     return (
         <>
-            <img src={`images/${emoji}`} alt={emoji}  />
+            <img src={`images/${emoji}`} alt={emoji} className={classes.emoji}  />
         </>
     )
 }
