@@ -1,18 +1,33 @@
 import React from "react";
+import Paper from '@material-ui/core/Paper';
 import { makeStyles } from '@material-ui/core/styles';
 
 const useStyles = makeStyles({
-    emoji: {
-        width: 100,
-        height: "auto",
+    bestResult: {
+        width: 480,
+        padding: 10,
+        margin: "auto",
+        backgroundColor: "lightgrey",
     },
+    emoji: {
+        width: 60,
+        height: "auto",
+        marginRight: 20,
+        verticalAlign: "top",
+    },
+    bestResultText: {
+        fontSize: "2.8em",
+        verticalAlign: "top",
+    },
+    originalText: {
+        width: 480,
+        margin: "auto",
+    }
 })
 
 const BestResult = ({bestResult}) => {
     const classes = useStyles();
     let emoji = ""
-
-    console.log("BestResult", bestResult)
     
     switch (bestResult) {
         case "amour":
@@ -35,16 +50,20 @@ const BestResult = ({bestResult}) => {
             break
         default:
             break
-
     }
+
+    bestResult = bestResult.charAt(0).toUpperCase() + bestResult.slice(1)
+
     return (
-        <>
+        <Paper elevation={2} className={classes.bestResult} >
             <img src={`images/${emoji}`} alt={emoji} className={classes.emoji}  />
-        </>
+            <span className={classes.bestResultText} >{bestResult}</span>
+        </Paper>
     )
 }
 
 const Result = ((props) => {
+    const classes = useStyles();
     const data = JSON.parse(sessionStorage.getItem("data"))
     // data["all_results"] = JSON.parse(data["all_results"])
 
@@ -57,16 +76,9 @@ const Result = ((props) => {
 
     return (
         <>
+            <p className={classes.originalText}>{data["original_text"]}</p>
+            <br /><br />
             <BestResult bestResult={data["best_result"]}/>
-            <br />
-            <h2>{data["best_result"]}</h2>
-            <h2>{data["original_text"]}</h2>
-            <h2>{data["translated_text"]}</h2>
-            <h2>{data["sents"]}</h2>
-            {/* {data["all_results"].forEach((key) => {
-                return (<h4>{key}</h4>)
-            })} */}
-            <p>{data["all_results"]["amour"]}</p>
         </>
     )
 })

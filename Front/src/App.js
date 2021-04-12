@@ -10,10 +10,12 @@ function App() {
       <div className="App">
         <Menu />
         <br />
-        <Switch>
-          <Route exact path="/" component={SubmitForm} />
-          <Route exact path="/result" component={Result} />
-        </Switch>
+        <div className="container" >
+          <Switch>
+            <Route exact path="/" component={SubmitForm} />
+            <Route exact path="/result" component={Result} />
+          </Switch>
+        </div>
       </div>
     </HashRouter>
   );
