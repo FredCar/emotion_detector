@@ -5,6 +5,7 @@ import Routing from "../Routing";
 import axios from 'axios';
 import Button from '@material-ui/core/Button';
 import LinearProgress from '@material-ui/core/LinearProgress';
+import Alert from '@material-ui/lab/Alert';
 import { makeStyles } from '@material-ui/core/styles';
 
 const useStyles = makeStyles({
@@ -20,6 +21,7 @@ const useStyles = makeStyles({
 const SubmitForm = ((props) => {
     const [text, setText] = useState();
     const [isLoading, setIsLoading] = useState(false);
+    const [alert, setAlert] = useState();
     const history = useHistory();
     const classes = useStyles();
     
@@ -38,6 +40,7 @@ const SubmitForm = ((props) => {
         })
         .catch((error) => {
             setIsLoading(false)
+            setAlert("Erreur")
             console.error(error)
         })
     });
