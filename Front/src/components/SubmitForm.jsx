@@ -15,7 +15,12 @@ const useStyles = makeStyles({
   progressBar: {
       width: 485,
       margin: "auto",
-  }
+  },
+  alert: {
+      width: 800,
+      margin: "auto",
+      marginBottom: 20,
+  },
 });
 
 const SubmitForm = ((props) => {
@@ -40,7 +45,7 @@ const SubmitForm = ((props) => {
         })
         .catch((error) => {
             setIsLoading(false)
-            setAlert("Erreur")
+            setAlert("Une erreur s'est produite !")
             console.error(error)
         })
     });
@@ -53,6 +58,13 @@ const SubmitForm = ((props) => {
 
     return (
         <>
+            {
+                alert && <>
+                <Alert severity="error" className={classes.alert} >
+                    {alert}
+                </Alert>
+                </>
+            }
             <form>
                 <textarea 
                     placeholder="Entrez votre texte içi..." 
