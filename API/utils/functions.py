@@ -92,13 +92,15 @@ class Model:
         for emotion in self.emotions.keys():
             all_results[emotion] = 0
 
-        # for pred in preds_list:
-        #     all_results["tristesse"] += pred["logits"][0][0]
-        #     all_results["colère"] += pred["logits"][0][1]
-        #     all_results["amour"] += pred["logits"][0][2]
-        #     all_results["surprise"] += pred["logits"][0][3]
-        #     all_results["peur"] += pred["logits"][0][4]
-        #     all_results["joie"] += pred["logits"][0][5]
+        for pred in preds_list:
+            print(pred)
+            print("===")
+            all_results["tristesse"] += pred[0]
+            all_results["colère"] += pred[1]
+            all_results["amour"] += pred[2]
+            all_results["surprise"] += pred[3]
+            all_results["peur"] += pred[4]
+            all_results["joie"] += pred[5]
 
 
         return all_results
