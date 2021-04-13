@@ -1,6 +1,7 @@
 import React from "react";
 import { makeStyles } from '@material-ui/core/styles';
 import BestResult from "./BestResult";
+import ResultsTable from "./ResultsTable";
 
 
 const useStyles = makeStyles({
@@ -18,15 +19,18 @@ const Result = ((props) => {
 
     // console.log("data", typeof data["all_results"])
 
-    for (const res in data["all_results"]) {
-        console.log("res", res, data["all_results"][res])
-    }
+    // for (const res in data["all_results"]) {
+    //     console.log("res", res, data["all_results"][res])
+    // }
 
     return (
         <>
             <p className={classes.originalText}>{data["original_text"]}</p>
             <br /><br />
             <BestResult bestResult={data["best_result"]}/>
+            <br /><br />
+            <ResultsTable allResults={data["all_results"]} sents={data["sents"]} />
+            {data["sents"]}
         </>
     )
 })
