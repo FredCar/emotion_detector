@@ -53,14 +53,14 @@ def predict():
         preds_list = model.predict(tokens_list)
 
         best_result = model.best_result(preds_list)
-        all_results = model.all_results(preds_list)
+        detailed_results = model.detailed_results(preds_list)
 
         data = {
             "best_result": str(best_result),
             "original_text": str(original_text["text"]),
             "translated_text": str(translated_text),
             "sents": sents,
-            "all_results": all_results,
+            "detailed_results": detailed_results,
         }
 
         return {"data": data}

@@ -29,7 +29,7 @@ const Result = ((props) => {
             <br /> <br />
             <BestResult bestResult={data["best_result"]}/>
             <br /> <br />
-            <ResultsTable allResults={data["all_results"]} sents={data["sents"]} />
+            <ResultsTable detailedResults={data["detailed_results"]} sents={data["sents"]} />
             <br /> <br />
             {data["sents"]}
         </>

@@ -87,20 +87,20 @@ class Model:
         return best_result
 
     
-    def all_results(self, preds_list):
-        all_results = {}
+    def detailed_results(self, preds_list):
+        detailed_results = {}
         for emotion in self.emotions.keys():
-            all_results[emotion] = 0
+            detailed_results[emotion] = 0
 
         for pred in preds_list:
-            all_results["tristesse"] += pred[0]
-            all_results["colère"] += pred[1]
-            all_results["amour"] += pred[2]
-            all_results["surprise"] += pred[3]
-            all_results["peur"] += pred[4]
-            all_results["joie"] += pred[5]
+            detailed_results["tristesse"] += pred[0]
+            detailed_results["colère"] += pred[1]
+            detailed_results["amour"] += pred[2]
+            detailed_results["surprise"] += pred[3]
+            detailed_results["peur"] += pred[4]
+            detailed_results["joie"] += pred[5]
 
-        for key, value in all_results.items():
-            all_results[key] = round(value, 2)
+        for key, value in detailed_results.items():
+            detailed_results[key] = round(value, 2)
 
-        return all_results
+        return detailed_results
