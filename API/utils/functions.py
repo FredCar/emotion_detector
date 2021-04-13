@@ -93,8 +93,6 @@ class Model:
             all_results[emotion] = 0
 
         for pred in preds_list:
-            print(pred)
-            print("===")
             all_results["tristesse"] += pred[0]
             all_results["colère"] += pred[1]
             all_results["amour"] += pred[2]
@@ -102,5 +100,7 @@ class Model:
             all_results["peur"] += pred[4]
             all_results["joie"] += pred[5]
 
+        for key, value in all_results.items():
+            all_results[key] = round(value, 2)
 
         return all_results

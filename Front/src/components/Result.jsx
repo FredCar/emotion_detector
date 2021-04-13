@@ -26,10 +26,11 @@ const Result = ((props) => {
     return (
         <>
             <p className={classes.originalText}>{data["original_text"]}</p>
-            <br /><br />
+            <br /> <br />
             <BestResult bestResult={data["best_result"]}/>
-            <br /><br />
+            <br /> <br />
             <ResultsTable allResults={data["all_results"]} sents={data["sents"]} />
+            <br /> <br />
             {data["sents"]}
         </>
     )

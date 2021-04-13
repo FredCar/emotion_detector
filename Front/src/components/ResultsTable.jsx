@@ -21,14 +21,8 @@ const ResultsTable = ({allResults, sents}) => {
         console.log("result", result)
         headers.push(<th>{res}</th>)
         rows.push(
-            <tr>
-                <td>{result[0]}</td>
-                <td>{result[1]}</td>
-                <td>{result[2]}</td>
-                <td>{result[3]}</td>
-                <td>{result[4]}</td>
-                <td>{result[5]}</td>
-            </tr>
+            <td>{result}</td>
+
         )
     }
 
@@ -39,7 +33,10 @@ const ResultsTable = ({allResults, sents}) => {
                     <th>Phrases</th>
                     {headers}
                 </tr>
-                {rows}
+                <tr>
+                    <td>{sents}</td>
+                    {rows}
+                </tr>
             </table>
         </>
     )
