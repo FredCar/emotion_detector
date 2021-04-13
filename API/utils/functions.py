@@ -87,20 +87,33 @@ class Model:
         return best_result
 
     
-    def detailed_results(self, preds_list):
+    def detailed_results(self, preds_list, phrases):
+        size = 0
+        emotions_list = [x for x in self.emotions.keys()]
+        print("preds_list", preds_list)
+        print("emotions_list", emotions_list)
         detailed_results = {}
-        for emotion in self.emotions.keys():
-            detailed_results[emotion] = 0
+        if len(preds_list) == len(phrases):
+            size = len(phrases)
 
-        for pred in preds_list:
-            detailed_results["tristesse"] += pred[0]
-            detailed_results["colère"] += pred[1]
-            detailed_results["amour"] += pred[2]
-            detailed_results["surprise"] += pred[3]
-            detailed_results["peur"] += pred[4]
-            detailed_results["joie"] += pred[5]
+        for i in range(size):
+            detailed_results[phrases[i]] = {}
+            for x in range(size):
+                detailed_results[phrases[i]][emotions_list[x]] = float(preds_list[i][x])
 
-        for key, value in detailed_results.items():
-            detailed_results[key] = round(value, 2)
+        # for emotion in self.emotions.keys():
+        #     detailed_results[emotion] = 0
 
+        # for pred in preds_list:
+        #     detailed_results["tristesse"] += pred[0]
+        #     detailed_results["colère"] += pred[1]
+        #     detailed_results["amour"] += pred[2]
+        #     detailed_results["surprise"] += pred[3]
+        #     detailed_results["peur"] += pred[4]
+        #     detailed_results["joie"] += pred[5]
+
+        # for key, value in detailed_results.items():
+        #     detailed_results[key] = round(value, 2)
+
+        print(detailed_results)
         return detailed_results

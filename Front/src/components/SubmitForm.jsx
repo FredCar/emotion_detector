@@ -32,6 +32,7 @@ const SubmitForm = ((props) => {
     
 
     const handleSubmit = (() => {
+        setAlert()
         setIsLoading(true)
         let url = `${Routing.baseUrl}/predict`
         let data = {
@@ -40,6 +41,7 @@ const SubmitForm = ((props) => {
 
         axios.post(url, data)
         .then(({data}) => {
+            console.log("DATA", data.data)
             sessionStorage.setItem("data", JSON.stringify(data.data))
             history.push("/result")
         })

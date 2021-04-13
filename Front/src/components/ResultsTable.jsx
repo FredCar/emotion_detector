@@ -4,39 +4,52 @@ import { makeStyles } from "@material-ui/core/styles";
 const useStyle = makeStyles({
     table: {
         margin: "auto",
-    }
+        border: "1px solid red",
+    },
+    tr: {
+        border: "1px solid red",
+    },
+    th: {
+        border: "1px solid red",
+    },
+    td: {
+        border: "1px solid red",
+    },
 })
 
-const ResultsTable = ({allResults, sents}) => {
+const ResultsTable = ({detailedResults, phrases}) => {
     const classes = useStyle();
 
-    console.log("all results", allResults)
+    console.log("phrases", phrases)
 
     let headers = []
     let rows = []
-    let result = ""
-    for (const res in allResults) {
-        console.log("res", res)
-        result = allResults[res]
-        console.log("result", result)
-        headers.push(<th>{res}</th>)
-        rows.push(
-            <td>{result}</td>
+    for (const res in detailedResults) {
+        headers.push(<th className={classes.th} >{res}</th>)
+    }
 
+    for (let i=0; i < phrases.length; i++ ) {
+        let column = []
+        column.push(
+
+        )
+
+        rows.push(
+            <tr>
+                <td className={classes.td} >{phrases[i]}</td>
+                {column}
+            </tr>
         )
     }
 
     return (
         <>
-            <table className={classes.table}>
-                <tr>
-                    <th>Phrases</th>
+            <table className={classes.table} >
+                <tr className={classes.tr} >
+                    <th className={classes.th} >Phrases</th>
                     {headers}
                 </tr>
-                <tr>
-                    <td>{sents}</td>
-                    {rows}
-                </tr>
+                {rows}
             </table>
         </>
     )
