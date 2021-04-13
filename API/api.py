@@ -46,6 +46,7 @@ def predict():
     if request.method == "POST": 
         original_text = request.data
         original_text = json.loads(original_text)
+        phrases = re.split(r"[.|;|!|\?|\n]", original_text["text"])
         translated_text = preprocess.translate(original_text["text"])
         sents = re.split(r"[.|;|!|\?|\n]", translated_text)
 
@@ -53,12 +54,13 @@ def predict():
         preds_list = model.predict(tokens_list)
 
         best_result = model.best_result(preds_list)
-        detailed_results = model.detailed_results(preds_list)
+        detailed_results = model.detailed_results(preds_list, phrases)
 
         data = {
             "best_result": str(best_result),
             "original_text": str(original_text["text"]),
             "translated_text": str(translated_text),
+            "phrases": phrases,
             "sents": sents,
             "detailed_results": detailed_results,
         }
