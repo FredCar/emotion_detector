@@ -4,6 +4,7 @@ import { useHistory } from "react-router-dom";
 import Routing from "../Routing";
 import axios from 'axios';
 import Button from '@material-ui/core/Button';
+import TextareaAutosize from '@material-ui/core/TextareaAutosize';
 import LinearProgress from '@material-ui/core/LinearProgress';
 import Alert from '@material-ui/lab/Alert';
 import { makeStyles } from '@material-ui/core/styles';
@@ -68,14 +69,12 @@ const SubmitForm = ((props) => {
                 </>
             }
             <form>
-                <textarea 
+                <TextareaAutosize 
                     placeholder="Entrez votre texte içi..." 
                     cols="50" 
-                    rows="5"
-                    wrap="on"
+                    rowsMin={10}
                     onChange={handleChange}
-                >
-                </textarea>
+                />
                 <br />
                 <br />
                 <Button 
