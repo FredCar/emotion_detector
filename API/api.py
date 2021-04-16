@@ -1,6 +1,10 @@
 import re
 from flask import Flask, request, jsonify, json
 from flask_sqlalchemy import SQLAlchemy
+from flask_jwt_extended import create_access_token
+from flask_jwt_extended import get_jwt_identity
+from flask_jwt_extended import jwt_required
+from flask_jwt_extended import JWTManager
 from flask_cors import CORS, cross_origin
 import tensorflow as tf
 from transformers import TFBertForSequenceClassification
@@ -14,11 +18,12 @@ app = Flask(__name__)
 
 cors = CORS(app)
 db = SQLAlchemy(app)
+jwt = JWTManager(app)
 
 
 app.config['CORS_HEADERS'] = 'Content-Type'
 app.config['SQLALCHEMY_DATABASE_URI'] = f'mysql://{config.MYSQL_USER}:{config.MYSQL_PASSWORD}@database/emotion_detector_db'
-
+app.config["JWT_SECRET_KEY"] = config.JWT_SECRET_KEY
 
 class User(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -38,6 +43,30 @@ def home():
     if request.method == "GET":
         # res = User.query.all()
         return {"message": ">>> GET <<<"}
+
+
+# Create a route to authenticate your users and return JWTs. The
+# create_access_token() function is used to actually generate the JWT.
+@app.route("/login", methods=["POST"])
+def login():
+    username = request.json.get("username", None)
+    password = request.json.get("password", None)
+    if username != "test" or password != "test":
+        return jsonify({"msg": "Bad username or password"}), 401
+
+    access_token = create_access_token(identity=username)
+    return jsonify(access_token=access_token)
+
+
+# @app.route("/token", methods=["POST"])
+# def create_token():
+
+#     response_body = {
+#         "message": "création de token"
+#     }
+
+#     return jsonify(response_body), 200
+
     
 
 @app.route("/predict", methods=["POST"])
