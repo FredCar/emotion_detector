@@ -4,7 +4,7 @@ from googletrans import Translator
 
 import sys, os
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-from utils.functions import Preprocess
+from utils.classes import Preprocess
 
 def test_Preprocess_class_init():
     p = Preprocess()
