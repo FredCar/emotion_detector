@@ -1,6 +1,5 @@
 from googletrans import Translator
 from transformers import BertTokenizer
-from googletrans import Translator
 
 import sys, os
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))

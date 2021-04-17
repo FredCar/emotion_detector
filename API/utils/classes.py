@@ -35,8 +35,8 @@ class Preprocess:
 
 
 class Model:
-    def __init__(self):
-        self.model = self.__load_model()
+    def __init__(self, path="/src/model/bert_model.h5"):
+        self.model = self.__load_model(path)
         self.emotions = {
             'tristesse': '0',
             'colère': '1',
@@ -48,8 +48,8 @@ class Model:
         self.emotions_reverse = {k : v for v, k in self.emotions.items()}
 
 
-    def __load_model(self):
-        model_save_path = "/src/model/bert_model.h5"
+    def __load_model(self, path):
+        model_save_path = path
         num_labels = 6
         loss = tf.keras.losses.SparseCategoricalCrossentropy(from_logits=True)
         optimizer = tf.keras.optimizers.Adam(learning_rate=2e-5,epsilon=1e-08)
