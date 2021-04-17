@@ -19,6 +19,18 @@ def test_translate_function():
     assert result == "Hello everybody"
 
 
+def test_googletranslate_api_disponibility():
+    t = Translator()
+    assert type(t) == Translator
+
+    sent = "Bonjour tout le monde"
+    result = t.translate(sent, dest="en")
+    assert result.origin == sent
+    assert result.dest == "en"
+    assert result.text != sent
+    assert result.src == "fr"
+
+
 def test_tokenize_function():
     p = Preprocess()
     sents = ["Je vais à la plage", "Bonjour tout le monde"]
