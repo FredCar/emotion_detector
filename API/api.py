@@ -10,7 +10,7 @@ import tensorflow as tf
 from transformers import TFBertForSequenceClassification
 from transformers import BertTokenizer
 from utils import config
-from utils.functions import *
+from utils.classes import *
 
 
 app = Flask(__name__)
