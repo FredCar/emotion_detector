@@ -19,6 +19,12 @@ def test_Preprocess_class_init():
     assert type(PREPROCESS.tokenizer) == BertTokenizer
 
 
+def test_clean_function():
+    text = '"Extrait avec des guillemets"'
+    result = PREPROCESS.clean(text)
+    assert result == "Extrait avec des guillemets"
+
+
 def test_translate_function():
     result = PREPROCESS.translate(SENT)
     assert result == "Hello everybody"
