@@ -49,7 +49,7 @@ def home():
 # create_access_token() function is used to actually generate the JWT.
 @app.route("/login", methods=["POST"])
 def login():
-    email = request.json.get("username", None)
+    email = request.json.get("email", None)
     password = request.json.get("password", None)
     if email != "test" or password != "test":
         return jsonify({"msg": "Bad username or password"}), 401

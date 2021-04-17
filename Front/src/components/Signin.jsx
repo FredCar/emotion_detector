@@ -33,7 +33,7 @@ const Signin = (props) => {
             setAlert("Les mots de passe sont différents !")
         }
 
-        let url = `${Routing.baseUrl}/signin`
+        let url = `${Routing.baseUrl}/login`
         let data = {
             "username": name, 
             "email": email,
@@ -41,16 +41,16 @@ const Signin = (props) => {
         }
 
         axios.post(url, data)
-        // .then(({data}) => {
-        //     console.log("DATA", data.data)
+        .then(({data}) => {
+            console.log("DATA", data)
         //     sessionStorage.setItem("data", JSON.stringify(data.data))
         //     history.push("/result")
-        // })
-        // .catch((error) => {
+        })
+        .catch((error) => {
         //     setIsLoading(false)
         //     setAlert("Une erreur s'est produite !")
-        //     console.error(error)
-        // })
+            console.error(error)
+        })
     }
 
     return (
@@ -70,7 +70,8 @@ const Signin = (props) => {
                 <br />
                 <label>
                     Email : 
-                    <input type="email" onChange={(e) => setEmail(e.target.value)} />
+                    {/* TODO Remettre type="email" */}
+                    <input type="texte" onChange={(e) => setEmail(e.target.value)} />
                 </label>
                 <br />
                 <label>
