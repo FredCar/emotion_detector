@@ -1,6 +1,20 @@
 import React from "react";
+import Button from '@material-ui/core/Button';
+import { makeStyles } from '@material-ui/core/styles';
+
+const useStyle = makeStyles({
+    connexion: {
+        position: "absolute",
+        right: 15,
+    },
+    button: {
+        display: "inline-block",
+    }
+})
 
 const Menu = ((props) => {
+    const classes = useStyle();
+
     return (
         <>
             <nav className="navbar navbar-expand-lg navbar-dark bg-dark">
@@ -14,6 +28,18 @@ const Menu = ((props) => {
                     <li className="nav-item active">
                         <a className="nav-link" href="/#result">Résultat <span className="sr-only">(current)</span></a>
                     </li>
+                    <div className={classes.connexion}>
+                        <li className="nav-item active" className={classes.button}>
+                            <Button variant="contained" color="primary">
+                                <a className="nav-link" href="/#signin">Inscription <span className="sr-only">(current)</span></a>
+                            </Button>
+                        </li>
+                        <li className="nav-item active" className={classes.button}>
+                            <Button variant="contained" color="secondary">
+                                <a className="nav-link" href="/#login">Connexion <span className="sr-only">(current)</span></a>
+                            </Button>
+                        </li>
+                    </div>
                     </ul>
                 </div>
             </nav>
