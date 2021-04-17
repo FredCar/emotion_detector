@@ -9,7 +9,7 @@ import LinearProgress from '@material-ui/core/LinearProgress';
 import Alert from '@material-ui/lab/Alert';
 import { makeStyles } from '@material-ui/core/styles';
 
-const useStyles = makeStyles({
+const useStyle = makeStyles({
   submitButton: {
       width: 485,
   },
@@ -29,7 +29,7 @@ const SubmitForm = ((props) => {
     const [isLoading, setIsLoading] = useState(false);
     const [alert, setAlert] = useState();
     const history = useHistory();
-    const classes = useStyles();
+    const classes = useStyle();
     
 
     const handleSubmit = (() => {

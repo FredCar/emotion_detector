@@ -1,3 +1,4 @@
+import re
 import tensorflow as tf
 from transformers import TFBertForSequenceClassification
 from transformers import BertTokenizer
@@ -12,6 +13,16 @@ class Preprocess:
         print("==================================")
         print("\t TOKENIZER LOADED")
         print("==================================")
+
+
+    def clean(self, original_text):
+        quotes = ["'", '"']
+        if original_text[0] in quotes:
+            original_text = original_text[1:]
+        if original_text[-1] in quotes:
+            original_text = original_text[:-1]
+        clean_text = original_text
+        return clean_text
 
 
     def translate(self, sent):

@@ -75,9 +75,12 @@ def predict():
     if request.method == "POST": 
         original_text = request.data
         original_text = json.loads(original_text)
-        phrases = re.split(r"[.|;|!|\?|\n]", original_text["text"])
-        translated_text = preprocess.translate(original_text["text"])
+        clean_text = preprocess.clean(original_text["text"])
+        phrases = re.split(r"[.|;|!|\?|\n]", clean_text)
+        translated_text = preprocess.translate(clean_text)
         sents = re.split(r"[.|;|!|\?|\n]", translated_text)
+        if "" in sents:
+            sents.remove("")
 
         tokens_list = preprocess.tokenize(sents)
         preds_list = model.predict(tokens_list)
