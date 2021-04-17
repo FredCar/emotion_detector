@@ -1,65 +1,47 @@
-# from googletrans import Translator
-# from transformers import BertTokenizer
-
+from transformers import TFBertForSequenceClassification
 import re
 import numpy as np
 import sys, os
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 from utils.classes import Model, Preprocess
 
+
 MODEL_PATH = "model/bert_model.h5"
+SENTS = ["Je vais à la plage", "Bonjour tout le monde", "Je suis content"]
+# We will load our classes in this golabal varaibles to avoid to reload its in each test
+MODEL = "" 
+PREPROCESS = ""
+PREDS_LIST = ""
 
 def test_Model_class_init():
-    m = Model(path=MODEL_PATH)
-    assert type(m) == Model
-
-
-def test_load_model():
-    assert 1 == 2
+    global MODEL
+    MODEL = Model(path=MODEL_PATH)
+    assert type(MODEL) == Model
+    assert type(MODEL.model) == TFBertForSequenceClassification
 
 
 def test_predict_function():
-    p = Preprocess()
-    sents = ["Je vais à la plage", "Bonjour tout le monde", "Je suis content"]
+    global PREPROCESS
+    global PREDS_LIST
+    PREPROCESS = Preprocess()
     
     translated_sents = []
-    for sent in sents:
-        translated_sents.append(p.translate(sent))
-    tokens_list = p.tokenize(translated_sents)
+    for sent in SENTS:
+        translated_sents.append(PREPROCESS.translate(sent))
+    tokens_list = PREPROCESS.tokenize(translated_sents)
     
-    m = Model(path=MODEL_PATH)
-    result = m.predict(tokens_list)
+    PREDS_LIST = MODEL.predict(tokens_list)
+    result = PREDS_LIST
     assert type(result) == list
-    assert len(result) == len(sents)
+    assert len(result) == len(SENTS)
 
 
-def test_best_result_function():
-    p = Preprocess()
-    sents = ["Je vais à la plage", "Bonjour tout le monde", "Je suis content"]
-    
-    translated_sents = []
-    for sent in sents:
-        translated_sents.append(p.translate(sent))
-    tokens_list = p.tokenize(translated_sents)
-    
-    m = Model(path=MODEL_PATH)
-    preds_list = m.predict(tokens_list)
-    result = m.best_result(preds_list)
-    assert result in m.emotions
+def test_best_result_function():    
+    result = MODEL.best_result(PREDS_LIST)
+    assert result in MODEL.emotions
 
 
-def test_detailled_results_function():
-    p = Preprocess()
-    sents = ["Je vais à la plage", "Bonjour tout le monde", "Je suis content"]
-    
-    translated_sents = []
-    for sent in sents:
-        translated_sents.append(p.translate(sent))
-    tokens_list = p.tokenize(translated_sents)
-    
-    m = Model(path=MODEL_PATH)
-    preds_list = m.predict(tokens_list)
-
-    result = m.detailed_results(preds_list, sents)
+def test_detailled_results_function():    
+    result = MODEL.detailed_results(PREDS_LIST, SENTS)
     assert type(result) == dict
-    assert len(result.keys()) == len(sents)
+    assert len(result.keys()) == len(SENTS)

@@ -5,17 +5,22 @@ import sys, os
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 from utils.classes import Preprocess
 
+
+PREPROCESS = ""
+SENT = "Bonjour tout le monde"
+SENTS = ["Je vais à la plage", "Bonjour tout le monde"]
+
+
 def test_Preprocess_class_init():
-    p = Preprocess()
-    assert type(p) == Preprocess
-    assert type(p.translator) == Translator
-    assert type(p.tokenizer) == BertTokenizer
+    global PREPROCESS
+    PREPROCESS = Preprocess()
+    assert type(PREPROCESS) == Preprocess
+    assert type(PREPROCESS.translator) == Translator
+    assert type(PREPROCESS.tokenizer) == BertTokenizer
 
 
 def test_translate_function():
-    p = Preprocess()
-    sent = "Bonjour tout le monde"
-    result = p.translate(sent)
+    result = PREPROCESS.translate(SENT)
     assert result == "Hello everybody"
 
 
@@ -23,17 +28,14 @@ def test_googletranslate_api_disponibility():
     t = Translator()
     assert type(t) == Translator
 
-    sent = "Bonjour tout le monde"
-    result = t.translate(sent, dest="en")
-    assert result.origin == sent
+    result = t.translate(SENT, dest="en")
+    assert result.origin == SENT
     assert result.dest == "en"
-    assert result.text != sent
+    assert result.text != SENT
     assert result.src == "fr"
 
 
 def test_tokenize_function():
-    p = Preprocess()
-    sents = ["Je vais à la plage", "Bonjour tout le monde"]
-    result = p.tokenize(sents)
+    result = PREPROCESS.tokenize(SENTS)
     assert len(result) == 2
     assert list(result[0].keys()) == ['input_ids', 'token_type_ids', 'attention_mask']
