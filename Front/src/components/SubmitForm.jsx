@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useState } from "react";
 import { useHistory } from "react-router-dom";
 import Routing from "../Routing";
@@ -31,14 +31,16 @@ const SubmitForm = ((props) => {
     const history = useHistory();
     const classes = useStyle();
 
-    console.log(">>> ", sessionStorage.getItem("alert"))
 
-    const passedAlert = sessionStorage.getItem("alert")
-    if (passedAlert && passedAlert.length > 0) {
-        console.log(">>>>>>>>>>>>>>>>>>>>")
-        setAlert(passedAlert)
-        sessionStorage.removeItem("alert")
-    }
+    useEffect(() => {
+        const passedAlertSeverity = sessionStorage.getItem("alert_severity")
+        const passedAlert = sessionStorage.getItem("alert")
+        if (passedAlertSeverity && passedAlert) {
+            setAlert([passedAlertSeverity, passedAlert])
+            sessionStorage.removeItem("alert")
+            sessionStorage.removeItem("alert_severity")
+        }
+    }, [])
     
 
     const handleSubmit = (() => {

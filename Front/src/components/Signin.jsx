@@ -42,10 +42,12 @@ const Signin = (props) => {
     const [alert, setAlert] = useState([]);
 
     // localStorage.removeItem("access_token")
+    // sessionStorage.removeItem("alert_severity")
+    // sessionStorage.removeItem("alert")
 
     const handleSubmit = () => {
         setAlert([])
-        if (password != confirmPassword) {
+        if (password !== confirmPassword) {
             setAlert(["error", "Les mots de passe sont différents !"])
             return ""
         }
@@ -59,13 +61,10 @@ const Signin = (props) => {
 
         axios.post(url, data)
         .then(({data}) => {
-            console.log("DATA", data.msg)
-            setAlert(["success", data.msg])
-            // BUG Pourqoui alert est vide ??
-            console.log("alert", alert)
-            sessionStorage.setItem("alert", alert)
+            sessionStorage.setItem("alert_severity", "success")
+            sessionStorage.setItem("alert", data.msg)
             localStorage.setItem("access_token", JSON.stringify(data.access_token))
-            // history.push("/")
+            history.push("/")
         })
         .catch((error) => {
             setAlert(["error", "Erreur : ce nom ou cet email éxiste déjà !"])
@@ -74,7 +73,7 @@ const Signin = (props) => {
     }
 
     return (
-        token && token != "" && token != "undefined"
+        token && token !== "" && token !== "undefined"
             ? <h3>Vous êtes déjà connecté !</h3>
             : <>
                 {
