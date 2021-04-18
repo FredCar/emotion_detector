@@ -57,7 +57,7 @@ const Signin = (props) => {
         .then(({data}) => {
             console.log("DATA", data)
             setAlert(["success", data.msg])
-            sessionStorage.setItem("access_token", JSON.stringify(data.access_token))
+            localStorage.setItem("access_token", JSON.stringify(data.access_token))
             // history.push("/")
         })
         .catch((error) => {
