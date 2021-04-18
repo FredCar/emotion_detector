@@ -33,6 +33,7 @@ const useStyle = makeStyles({
 
 const Signin = (props) => {
     const classes = useStyle();
+    const history = useHistory();
     const [name, setName] = useState();
     const [email, setEmail] = useState();
     const [password, setPassword] = useState();
@@ -56,8 +57,8 @@ const Signin = (props) => {
         .then(({data}) => {
             console.log("DATA", data)
             setAlert(["success", data.msg])
-        //     sessionStorage.setItem("data", JSON.stringify(data.data))
-        //     history.push("/result")
+            sessionStorage.setItem("access_token", JSON.stringify(data.access_token))
+            // history.push("/")
         })
         .catch((error) => {
             setAlert(["error", "Erreur : ce nom ou cet email éxiste déjà !"])

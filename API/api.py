@@ -67,7 +67,12 @@ def join():
         )
         db.session.add(user)
         db.session.commit()
-        return jsonify({"msg": f"Compte de {data['username']} créé avec succés"}), 200
+
+        access_token = create_access_token(identity=data["email"])
+        return jsonify({
+            "msg": f"Compte de {data['username']} créé avec succés",
+            "access_token": access_token,
+        }), 200
 
 
 # Create a route to authenticate your users and return JWTs. The
