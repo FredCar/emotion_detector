@@ -57,7 +57,7 @@ def join():
         old_username = User.query.filter_by(username=data["username"]).all()
         old_email = User.query.filter_by(email=data["email"]).all()
         if len(old_username) > 0 or len(old_email) > 0:
-            return jsonify({"msg": "Erreur ce nom ou cet email éxiste déjà !"}), 400
+            return jsonify({"msg": "Erreur ce nom ou cet email éxiste déjà !"}), 403
 
         # Insert user's data in database
         user = User(

@@ -37,9 +37,10 @@ const Signin = (props) => {
     const [email, setEmail] = useState();
     const [password, setPassword] = useState();
     const [confirmPassword, setConfirmPassword] = useState();
-    const [alert, setAlert] = useState();
+    const [alert, setAlert] = useState([]);
 
     const handleSubmit = () => {
+        setAlert([])
         if (password != confirmPassword) {
             setAlert("Les mots de passe sont différents !")
         }
@@ -54,12 +55,12 @@ const Signin = (props) => {
         axios.post(url, data)
         .then(({data}) => {
             console.log("DATA", data)
+            setAlert(["success", data.msg])
         //     sessionStorage.setItem("data", JSON.stringify(data.data))
         //     history.push("/result")
         })
         .catch((error) => {
-        //     setIsLoading(false)
-        //     setAlert("Une erreur s'est produite !")
+            setAlert(["error", "Erreur : ce nom ou cet email éxiste déjà !"])
             console.error(error)
         })
     }
@@ -67,9 +68,9 @@ const Signin = (props) => {
     return (
         <>
             {
-                alert && <>
-                <Alert severity="error" className={classes.alert} >
-                    {alert}
+                alert.length > 0 && <>
+                <Alert severity={alert[0]} className={classes.alert} >
+                    {alert[1]}
                 </Alert>
                 </>
             }
