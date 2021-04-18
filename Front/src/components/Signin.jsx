@@ -44,7 +44,7 @@ const Signin = (props) => {
             setAlert("Les mots de passe sont différents !")
         }
 
-        let url = `${Routing.baseUrl}/login`
+        let url = `${Routing.baseUrl}/join`
         let data = {
             "username": name, 
             "email": email,
