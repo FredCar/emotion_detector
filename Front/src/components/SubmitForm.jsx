@@ -27,13 +27,22 @@ const useStyle = makeStyles({
 const SubmitForm = ((props) => {
     const [text, setText] = useState();
     const [isLoading, setIsLoading] = useState(false);
-    const [alert, setAlert] = useState();
+    const [alert, setAlert] = useState([]);
     const history = useHistory();
     const classes = useStyle();
+
+    console.log(">>> ", sessionStorage.getItem("alert"))
+
+    const passedAlert = sessionStorage.getItem("alert")
+    if (passedAlert && passedAlert.length > 0) {
+        console.log(">>>>>>>>>>>>>>>>>>>>")
+        setAlert(passedAlert)
+        sessionStorage.removeItem("alert")
+    }
     
 
     const handleSubmit = (() => {
-        setAlert()
+        setAlert([])
         setIsLoading(true)
         let url = `${Routing.baseUrl}/predict`
         let data = {
@@ -48,7 +57,7 @@ const SubmitForm = ((props) => {
         })
         .catch((error) => {
             setIsLoading(false)
-            setAlert("Une erreur s'est produite !")
+            setAlert(["error", "Une erreur s'est produite !"])
             console.error(error)
         })
     });
@@ -62,9 +71,9 @@ const SubmitForm = ((props) => {
     return (
         <>
             {
-                alert && <>
-                <Alert severity="error" className={classes.alert} >
-                    {alert}
+                alert.length > 0 && <>
+                <Alert severity={alert[0]} className={classes.alert} >
+                    {alert[1]}
                 </Alert>
                 </>
             }

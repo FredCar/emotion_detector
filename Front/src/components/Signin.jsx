@@ -47,6 +47,7 @@ const Signin = (props) => {
         setAlert([])
         if (password != confirmPassword) {
             setAlert(["error", "Les mots de passe sont différents !"])
+            return ""
         }
 
         let url = `${Routing.baseUrl}/join`
@@ -58,8 +59,11 @@ const Signin = (props) => {
 
         axios.post(url, data)
         .then(({data}) => {
-            console.log("DATA", data)
+            console.log("DATA", data.msg)
             setAlert(["success", data.msg])
+            // BUG Pourqoui alert est vide ??
+            console.log("alert", alert)
+            sessionStorage.setItem("alert", alert)
             localStorage.setItem("access_token", JSON.stringify(data.access_token))
             // history.push("/")
         })
