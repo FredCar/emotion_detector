@@ -11,6 +11,7 @@ from transformers import TFBertForSequenceClassification
 from transformers import BertTokenizer
 from utils import config
 from utils.classes import *
+from utils.functions import *
 
 
 app = Flask(__name__)
@@ -29,6 +30,7 @@ class User(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(80), unique=True, nullable=False)
     email = db.Column(db.String(120), unique=True, nullable=False)
+    password = db.Column(db.String(120), nullable=False)
 
     def __repr__(self):
         return f'<User {self.username}>'
@@ -52,7 +54,11 @@ def join():
         data = json.loads(request.data)
         print(">>> ", data["username"])
 
-        user = User(username=data["username"], email=data["email"])
+        user = User(
+            username=data["username"], 
+            email=data["email"],
+            password=hash_password(data["password"])
+        )
         db.session.add(user)
         db.session.commit()
 
