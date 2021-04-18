@@ -52,8 +52,14 @@ def home():
 def join():
     if request.method == "POST":
         data = json.loads(request.data)
-        print(">>> ", data["username"])
 
+        # Control if user's data already exist
+        old_username = User.query.filter_by(username=data["username"]).all()
+        old_email = User.query.filter_by(email=data["email"]).all()
+        if len(old_username) > 0 or len(old_email) > 0:
+            return jsonify({"msg": "Erreur ce nom ou cet email éxiste déjà !"}), 400
+
+        # Insert user's data in database
         user = User(
             username=data["username"], 
             email=data["email"],
@@ -61,9 +67,7 @@ def join():
         )
         db.session.add(user)
         db.session.commit()
-
-
-        return jsonify({"msg": "Compte créé avec succés"}), 200
+        return jsonify({"msg": f"Compte de {data['username']} créé avec succés"}), 200
 
 
 # Create a route to authenticate your users and return JWTs. The
