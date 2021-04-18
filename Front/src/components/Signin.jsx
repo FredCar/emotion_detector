@@ -34,16 +34,19 @@ const useStyle = makeStyles({
 const Signin = (props) => {
     const classes = useStyle();
     const history = useHistory();
+    const token = localStorage.getItem("access_token")
     const [name, setName] = useState();
     const [email, setEmail] = useState();
     const [password, setPassword] = useState();
     const [confirmPassword, setConfirmPassword] = useState();
     const [alert, setAlert] = useState([]);
 
+    // localStorage.removeItem("access_token")
+
     const handleSubmit = () => {
         setAlert([])
         if (password != confirmPassword) {
-            setAlert("Les mots de passe sont différents !")
+            setAlert(["error", "Les mots de passe sont différents !"])
         }
 
         let url = `${Routing.baseUrl}/join`
@@ -67,44 +70,46 @@ const Signin = (props) => {
     }
 
     return (
-        <>
-            {
-                alert.length > 0 && <>
-                <Alert severity={alert[0]} className={classes.alert} >
-                    {alert[1]}
-                </Alert>
-                </>
-            }
-            <div className={classes.body}>
-                <form>
-                    <label>
-                        Nom : 
-                        <input type="texte" className={classes.input} onChange={(e) => setName(e.target.value)} />
-                    </label>
-                    <label>
-                        Email : 
-                        {/* TODO Remettre type="email" */}
-                        <input type="texte" className={classes.input} onChange={(e) => setEmail(e.target.value)} />
-                    </label>
-                    <label>
-                        Mot de passe : 
-                        <input type="password" className={classes.input} onChange={(e) => setPassword(e.target.value)} />
-                    </label>
-                    <label>
-                        Confirmation du mot de passe : 
-                        <input type="password" className={classes.input} onChange={(e) => setConfirmPassword(e.target.value)} />
-                    </label>
-                    <Button 
-                    variant="contained"
-                    color="primary"
-                    className={classes.submitButton}
-                    onClick={handleSubmit}
-                >
-                    Envoyer
-                </Button>
-                </form>
-            </div>
-        </>
+        token && token != "" && token != "undefined"
+            ? <h3>Vous êtes déjà connecté !</h3>
+            : <>
+                {
+                    alert.length > 0 && <>
+                    <Alert severity={alert[0]} className={classes.alert} >
+                        {alert[1]}
+                    </Alert>
+                    </>
+                }
+                <div className={classes.body}>
+                    <form>
+                        <label>
+                            Nom : 
+                            <input type="texte" className={classes.input} onChange={(e) => setName(e.target.value)} />
+                        </label>
+                        <label>
+                            Email : 
+                            {/* TODO Remettre type="email" */}
+                            <input type="texte" className={classes.input} onChange={(e) => setEmail(e.target.value)} />
+                        </label>
+                        <label>
+                            Mot de passe : 
+                            <input type="password" className={classes.input} onChange={(e) => setPassword(e.target.value)} />
+                        </label>
+                        <label>
+                            Confirmation du mot de passe : 
+                            <input type="password" className={classes.input} onChange={(e) => setConfirmPassword(e.target.value)} />
+                        </label>
+                        <Button 
+                        variant="contained"
+                        color="primary"
+                        className={classes.submitButton}
+                        onClick={handleSubmit}
+                    >
+                        Envoyer
+                    </Button>
+                    </form>
+                </div>
+            </>
     )
 };
 
