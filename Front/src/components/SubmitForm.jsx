@@ -50,8 +50,11 @@ const SubmitForm = ((props) => {
         let data = {
             "text" : text,
         };
+        let config = {
+            headers: { Authorization: `Bearer ${localStorage.getItem('access_token')}` }
+        };
 
-        axios.post(url, data)
+        axios.post(url, data, config)
         .then(({data}) => {
             console.log("DATA", data.data)
             sessionStorage.setItem("data", JSON.stringify(data.data))

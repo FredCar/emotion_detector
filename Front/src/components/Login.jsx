@@ -48,7 +48,7 @@ const Login = (props) => {
         .then(({data}) => {
             sessionStorage.setItem("alert_severity", "success")
             sessionStorage.setItem("alert", data.msg)
-            localStorage.setItem("access_token", JSON.stringify(data.access_token))
+            localStorage.setItem("access_token", data.access_token)
             history.push("/")
         })
         .catch((error) => {

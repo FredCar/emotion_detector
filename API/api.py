@@ -86,11 +86,12 @@ def login():
         print(type(users), users)
         if len(users) == 0:
             return jsonify({"msg": "Email ou mot de passe incorrect"}), 401
+        # Ne devrait jamais se déclencher
         if len(users) > 1:
             return jsonify({"msg": "Erreur !!"}), 400
 
         user = users[0]
-        access_token = create_access_token(identity=user.email)
+        access_token = create_access_token(identity={"email": user.email, "username": user.username})
         return jsonify({
             "msg": f"{user.username} : vous êtes bien connecté",
             "access_token" : access_token,
@@ -110,8 +111,10 @@ def login():
     
 
 @app.route("/predict", methods=["POST"])
+@jwt_required()
 @cross_origin()
 def predict():
+    print("jwt identity >>>   ", get_jwt_identity())
     if request.method == "POST": 
         original_text = request.data
         original_text = json.loads(original_text)
