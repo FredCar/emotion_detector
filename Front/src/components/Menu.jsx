@@ -1,6 +1,7 @@
 import React from "react";
 import Button from '@material-ui/core/Button';
 import { makeStyles } from '@material-ui/core/styles';
+import LogoutButton from "./LogoutButton";
 
 const useStyle = makeStyles({
     connexionDiv: {
@@ -18,6 +19,7 @@ const useStyle = makeStyles({
 
 const Menu = ((props) => {
     const classes = useStyle();
+    const token = sessionStorage.getItem("access_token")
 
     return (
         <>
@@ -39,9 +41,7 @@ const Menu = ((props) => {
                             </Button>
                         </li>
                         <li className="nav-item active"className={classes.buttonLi}>
-                            <Button variant="contained" color="primary" size="small" className={classes.button}>
-                                <a className="nav-link" href="/#login">Connexion <span className="sr-only">(current)</span></a>
-                            </Button>
+                            <LogoutButton />
                         </li>
                     </div>
                     </ul>
