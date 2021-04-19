@@ -58,7 +58,7 @@ const Login = (props) => {
     }
 
     return (
-        token && token !== "" && token !== "undefined"
+        token && token !== "" && token !== undefined
             ? <h3>Vous êtes déjà connecté !</h3>
             : <>
                 {
