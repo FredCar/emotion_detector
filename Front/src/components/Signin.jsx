@@ -20,10 +20,6 @@ const useStyle = makeStyles({
     submitButton: {
         width: 480,
     },
-    progressBar: {
-        width: 485,
-        margin: "auto",
-    },
     alert: {
         width: 800,
         margin: "auto",
