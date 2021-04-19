@@ -52,7 +52,7 @@ const Login = (props) => {
             history.push("/")
         })
         .catch((error) => {
-            setAlert(["error", "Erreur : ce nom ou cet email éxiste déjà !"])
+            setAlert(["error", "Erreur : Email ou mot de passe incorrect"])
             console.error(error)
         })
     }

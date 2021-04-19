@@ -26,6 +26,7 @@ app.config['CORS_HEADERS'] = 'Content-Type'
 app.config['SQLALCHEMY_DATABASE_URI'] = f'mysql://{config.MYSQL_USER}:{config.MYSQL_PASSWORD}@database/emotion_detector_db'
 app.config["JWT_SECRET_KEY"] = config.JWT_SECRET_KEY
 
+
 class User(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(80), unique=True, nullable=False)
@@ -34,6 +35,7 @@ class User(db.Model):
 
     def __repr__(self):
         return f'<User {self.username}>'
+
 
 preprocess = Preprocess()
 model = Model()
@@ -75,18 +77,26 @@ def join():
         }), 200
 
 
-# Create a route to authenticate your users and return JWTs. The
-# create_access_token() function is used to actually generate the JWT.
 @app.route("/login", methods=["POST"])
 def login():
-    email = request.json.get("email", None)
-    password = request.json.get("password", None)
-    if email != "test" or password != "test":
-        return jsonify({"msg": "Bad username or password"}), 401
+    if request.method == "POST":
+        data = json.loads(request.data)
 
-    access_token = create_access_token(identity=email)
-    return jsonify(access_token=access_token)
+        users = User.query.filter_by(email=data["email"], password=hash_password(data["password"])).all()
+        print(type(users), users)
+        if len(users) == 0:
+            return jsonify({"msg": "Email ou mot de passe incorrect"}), 401
+        if len(users) > 1:
+            return jsonify({"msg": "Erreur !!"}), 400
 
+        user = users[0]
+        access_token = create_access_token(identity=user.email)
+        return jsonify({
+            "msg": f"{user.username} : vous êtes bien connecté",
+            "access_token" : access_token,
+        })
+
+        
 
 # @app.route("/token", methods=["POST"])
 # def create_token():
