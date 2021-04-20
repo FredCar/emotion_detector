@@ -1,4 +1,7 @@
 import React, { useState } from "react";
+import { useHistory } from "react-router-dom";
+import Routing from "../Routing";
+import axios from 'axios';
 import Alert from '@material-ui/lab/Alert';
 import { makeStyles } from '@material-ui/core/styles';
 
@@ -29,6 +32,25 @@ const Signin = (props) => {
         if (password != confirmPassword) {
             setAlert("Les mots de passe sont différents !")
         }
+
+        let url = `${Routing.baseUrl}/signin`
+        let data = {
+            "username": name, 
+            "email": email,
+            "password": password,
+        }
+
+        axios.post(url, data)
+        // .then(({data}) => {
+        //     console.log("DATA", data.data)
+        //     sessionStorage.setItem("data", JSON.stringify(data.data))
+        //     history.push("/result")
+        // })
+        // .catch((error) => {
+        //     setIsLoading(false)
+        //     setAlert("Une erreur s'est produite !")
+        //     console.error(error)
+        // })
     }
 
     return (
