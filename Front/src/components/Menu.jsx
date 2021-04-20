@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { isExpired, decodeToken } from "react-jwt";
 import Button from '@material-ui/core/Button';
 import { makeStyles } from '@material-ui/core/styles';
 import LogoutButton from "./LogoutButton";
@@ -21,11 +22,10 @@ const Menu = (({accessToken, ...pros}) => {
     const classes = useStyle();
     const [token, setToken] = useState();
     
+    // TODO Try to fix the refresh of menu if token exists
     useEffect(() => {
         setToken(localStorage.getItem("access_token"))
     }, [localStorage])
-
-    console.log("token >>> ", token)
 
     return (
         <>
@@ -48,7 +48,7 @@ const Menu = (({accessToken, ...pros}) => {
                         </li>
                         <li className="nav-item active"className={classes.buttonLi}>
                             {
-                                token && token !== "" && token !== undefined
+                                !isExpired(token)
                                     ? <LogoutButton />
                                     : <Button 
                                         variant="contained" 

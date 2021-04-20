@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { useHistory } from "react-router-dom";
+import { isExpired } from "react-jwt";
 import Routing from "../Routing";
 import axios from 'axios';
 import Button from '@material-ui/core/Button';
@@ -37,10 +38,6 @@ const Signin = (props) => {
     const [confirmPassword, setConfirmPassword] = useState();
     const [alert, setAlert] = useState([]);
 
-    // localStorage.removeItem("access_token")
-    // sessionStorage.removeItem("alert_severity")
-    // sessionStorage.removeItem("alert")
-
     const handleSubmit = () => {
         setAlert([])
         if (password !== confirmPassword) {
@@ -59,8 +56,10 @@ const Signin = (props) => {
         .then(({data}) => {
             sessionStorage.setItem("alert_severity", "success")
             sessionStorage.setItem("alert", data.msg)
-            localStorage.setItem("access_token", data.access_token)
-            history.push("/")
+            if (!isExpired(data.access_token)) {
+                localStorage.setItem("access_token", data.access_token)
+                history.push("/")
+            }
         })
         .catch((error) => {
             setAlert(["error", "Erreur : ce nom ou cet email éxiste déjà !"])
@@ -69,7 +68,7 @@ const Signin = (props) => {
     }
 
     return (
-        token && token !== "" && token !== undefined
+        !isExpired(token)
             ? <h3>Vous êtes déjà connecté !</h3>
             : <>
                 {

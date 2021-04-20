@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { useHistory } from "react-router-dom";
+import { isExpired } from "react-jwt";
 import Routing from "../Routing";
 import axios from 'axios';
 import Button from '@material-ui/core/Button';
@@ -48,8 +49,10 @@ const Login = (props) => {
         .then(({data}) => {
             sessionStorage.setItem("alert_severity", "success")
             sessionStorage.setItem("alert", data.msg)
-            localStorage.setItem("access_token", data.access_token)
-            history.push("/")
+            if (!isExpired(data.access_token)) {
+                localStorage.setItem("access_token", data.access_token)
+                history.push("/")
+            }
         })
         .catch((error) => {
             setAlert(["error", "Erreur : Email ou mot de passe incorrect"])
@@ -58,7 +61,7 @@ const Login = (props) => {
     }
 
     return (
-        token && token !== "" && token !== undefined
+        !isExpired(token)
             ? <h3>Vous êtes déjà connecté !</h3>
             : <>
                 {
