@@ -1,19 +1,31 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
+import { isExpired, decodeToken } from "react-jwt";
 import Button from '@material-ui/core/Button';
 import { makeStyles } from '@material-ui/core/styles';
+import LogoutButton from "./LogoutButton";
 
 const useStyle = makeStyles({
-    connexion: {
+    connexionDiv: {
         position: "absolute",
         right: 15,
     },
-    button: {
+    buttonLi: {
         display: "inline-block",
+        marginLeft: 10,
+    },
+    button: {
+        height: 30,
     }
 })
 
-const Menu = ((props) => {
+const Menu = (({accessToken, ...pros}) => {
     const classes = useStyle();
+    const [token, setToken] = useState();
+    
+    // TODO Try to fix the refresh of menu if token exists
+    useEffect(() => {
+        setToken(localStorage.getItem("access_token"))
+    }, [localStorage])
 
     return (
         <>
@@ -28,16 +40,26 @@ const Menu = ((props) => {
                     <li className="nav-item active">
                         <a className="nav-link" href="/#result">Résultat <span className="sr-only">(current)</span></a>
                     </li>
-                    <div className={classes.connexion}>
-                        <li className="nav-item active" className={classes.button}>
-                            <Button variant="contained" color="primary">
+                    <div className={classes.connexionDiv}>
+                        <li className="nav-item active" className={classes.buttonLi}>
+                            <Button size="small" className={classes.button}>
                                 <a className="nav-link" href="/#signin">Inscription <span className="sr-only">(current)</span></a>
                             </Button>
                         </li>
-                        <li className="nav-item active" className={classes.button}>
-                            <Button variant="contained" color="secondary">
-                                <a className="nav-link" href="/#login">Connexion <span className="sr-only">(current)</span></a>
-                            </Button>
+                        <li className="nav-item active"className={classes.buttonLi}>
+                            {
+                                !isExpired(token)
+                                    ? <LogoutButton />
+                                    : <Button 
+                                        variant="contained" 
+                                        color="primary" 
+                                        size="small" 
+                                        className={classes.button}
+                                    >
+                                        <a className="nav-link" href="/#login">Connexion <span className="sr-only">(current)</span></a>
+                                    </Button>
+                            }
+                            
                         </li>
                     </div>
                     </ul>

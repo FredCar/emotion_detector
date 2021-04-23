@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useState } from "react";
 import { useHistory } from "react-router-dom";
 import Routing from "../Routing";
@@ -27,20 +27,34 @@ const useStyle = makeStyles({
 const SubmitForm = ((props) => {
     const [text, setText] = useState();
     const [isLoading, setIsLoading] = useState(false);
-    const [alert, setAlert] = useState();
+    const [alert, setAlert] = useState([]);
     const history = useHistory();
     const classes = useStyle();
+
+
+    useEffect(() => {
+        const passedAlertSeverity = sessionStorage.getItem("alert_severity")
+        const passedAlert = sessionStorage.getItem("alert")
+        if (passedAlertSeverity && passedAlert) {
+            setAlert([passedAlertSeverity, passedAlert])
+            sessionStorage.removeItem("alert")
+            sessionStorage.removeItem("alert_severity")
+        }
+    }, [])
     
 
     const handleSubmit = (() => {
-        setAlert()
+        setAlert([])
         setIsLoading(true)
         let url = `${Routing.baseUrl}/predict`
         let data = {
             "text" : text,
         };
+        let config = {
+            headers: { Authorization: `Bearer ${localStorage.getItem('access_token')}` }
+        };
 
-        axios.post(url, data)
+        axios.post(url, data, config)
         .then(({data}) => {
             console.log("DATA", data.data)
             sessionStorage.setItem("data", JSON.stringify(data.data))
@@ -48,7 +62,7 @@ const SubmitForm = ((props) => {
         })
         .catch((error) => {
             setIsLoading(false)
-            setAlert("Une erreur s'est produite !")
+            setAlert(["error", "Une erreur s'est produite !"])
             console.error(error)
         })
     });
@@ -62,9 +76,9 @@ const SubmitForm = ((props) => {
     return (
         <>
             {
-                alert && <>
-                <Alert severity="error" className={classes.alert} >
-                    {alert}
+                alert.length > 0 && <>
+                <Alert severity={alert[0]} className={classes.alert} >
+                    {alert[1]}
                 </Alert>
                 </>
             }
