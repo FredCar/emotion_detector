@@ -96,18 +96,6 @@ def login():
             "msg": f"{user.username} : vous êtes bien connecté",
             "access_token" : access_token,
         })
-
-        
-
-# @app.route("/token", methods=["POST"])
-# def create_token():
-
-#     response_body = {
-#         "message": "création de token"
-#     }
-
-#     return jsonify(response_body), 200
-
     
 
 @app.route("/predict", methods=["POST"])
