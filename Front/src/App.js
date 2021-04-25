@@ -1,10 +1,10 @@
 import { HashRouter, Route, Switch } from 'react-router-dom'
 import './App.css';
 import Menu from "./components/Menu";
-import SubmitForm from "./components/SubmitForm";
-import Result from "./components/Result";
-import Signin from "./components/Signin";
-import Login from "./components/Login";
+import SubmitForm from "./pages/submit/SubmitForm";
+import Result from "./pages/result/Result";
+import Signin from "./pages/signin/Signin";
+import Login from "./pages/login/Login";
 
 function App() {
   return (
