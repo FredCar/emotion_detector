@@ -48,9 +48,9 @@ const SubmitUrl = ((props) => {
     const handleSubmit = (() => {
         setAlert([])
         setIsLoading(true)
-        let url = `${Routing.baseUrl}/predict`
+        let url = `${Routing.baseUrl}/scrap_airbnb`
         let data = {
-            "text" : text,
+            "url" : text,
         };
         let config = {
             headers: { Authorization: `Bearer ${localStorage.getItem('access_token')}` }

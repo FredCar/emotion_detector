@@ -138,7 +138,7 @@ def predict():
 def scrap_airbnb():
     if request.method == "POST":
         data = json.loads(request.data)
-        airbnb_scraper()
+        airbnb_scraper(data["url"])
         print(data["url"])
         return {"data": "Pppppssssssssssssstttttt"}
     pass
