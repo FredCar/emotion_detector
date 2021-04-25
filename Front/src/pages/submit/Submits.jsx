@@ -1,7 +1,8 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Button from '@material-ui/core/Button';
 import { makeStyles } from '@material-ui/core/styles';
-import SubmitText from "./SubmitText"
+import SubmitText from "./SubmitText";
+import SubmitUrl from "./SubmitUrl";
 
 const useStyle = makeStyles({
   choiceButton: {
@@ -15,6 +16,16 @@ const useStyle = makeStyles({
 const Submits = (props) => {
     const classes = useStyle();
     const [choice, setChoice] = useState("airbnb")
+    let component = ""
+
+    switch (choice) {
+        case "text":
+            component = <SubmitText />
+            break
+        case "airbnb":
+            component = <SubmitUrl />
+            break
+    }
 
     return(
         <>
@@ -37,7 +48,7 @@ const Submits = (props) => {
                     Texte libre
                 </Button>
             </div>
-            <SubmitText />
+            {component}
         </>
     )
 };
