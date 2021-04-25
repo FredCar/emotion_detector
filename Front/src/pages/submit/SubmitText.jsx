@@ -24,7 +24,7 @@ const useStyle = makeStyles({
   },
 });
 
-const SubmitForm = ((props) => {
+const SubmitText = ((props) => {
     const [text, setText] = useState();
     const [isLoading, setIsLoading] = useState(false);
     const [alert, setAlert] = useState([]);
@@ -107,4 +107,4 @@ const SubmitForm = ((props) => {
     )
 });
 
-export default SubmitForm;
+export default SubmitText;
