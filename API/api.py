@@ -12,6 +12,7 @@ from transformers import BertTokenizer
 from utils import config
 from utils.classes import *
 from utils.functions import *
+from utils.airbnb_scraper import *
 
 
 app = Flask(__name__)
@@ -83,7 +84,6 @@ def login():
         data = json.loads(request.data)
 
         users = User.query.filter_by(email=data["email"], password=hash_password(data["password"])).all()
-        print(type(users), users)
         if len(users) == 0:
             return jsonify({"msg": "Email ou mot de passe incorrect"}), 401
         # Ne devrait jamais se déclencher
@@ -102,7 +102,6 @@ def login():
 @jwt_required()
 @cross_origin()
 def predict():
-    print("jwt identity >>>   ", get_jwt_identity())
     if request.method == "POST": 
         original_text = request.data
         original_text = json.loads(original_text)
@@ -131,6 +130,18 @@ def predict():
         return {"data": data}
 
     return {"data": "Erreur"}
+
+
+@app.route("/scrap_airbnb", methods=["POST"])
+@jwt_required()
+@cross_origin()
+def scrap_airbnb():
+    if request.method == "POST":
+        data = json.loads(request.data)
+        airbnb_scraper()
+        print(data["url"])
+        return {"data": "Pppppssssssssssssstttttt"}
+    pass
 
 
 if __name__ == "__main__":
