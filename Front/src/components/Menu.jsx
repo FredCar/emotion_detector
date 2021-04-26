@@ -20,12 +20,30 @@ const useStyle = makeStyles({
 
 const Menu = (({accessToken, ...pros}) => {
     const classes = useStyle();
-    const [token, setToken] = useState();
+    const [token, setToken] = useState(accessToken);
     
-    // TODO Try to fix the refresh of menu if token exists
     useEffect(() => {
-        setToken(localStorage.getItem("access_token"))
-    }, [localStorage])
+        setInterval(() => {
+            setToken(localStorage.getItem("access_token"))
+        }, [])
+    }, 5000);
+
+    const LogButton = () => {
+        if (!token && isExpired(token)) {
+            return (
+                <Button 
+                    variant="contained" 
+                    color="primary" 
+                    size="small" 
+                    className={classes.button}
+                >
+                    <a className="nav-link" href="/#login">Connexion <span className="sr-only">(current)</span></a>
+                </Button>
+            )
+        } else {
+            return <LogoutButton />
+        }
+    }
 
     return (
         <>
@@ -47,19 +65,7 @@ const Menu = (({accessToken, ...pros}) => {
                             </Button>
                         </li>
                         <li className="nav-item active"className={classes.buttonLi}>
-                            {
-                                !isExpired(token)
-                                    ? <LogoutButton />
-                                    : <Button 
-                                        variant="contained" 
-                                        color="primary" 
-                                        size="small" 
-                                        className={classes.button}
-                                    >
-                                        <a className="nav-link" href="/#login">Connexion <span className="sr-only">(current)</span></a>
-                                    </Button>
-                            }
-                            
+                            <LogButton />                            
                         </li>
                     </div>
                     </ul>
