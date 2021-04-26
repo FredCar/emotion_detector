@@ -58,6 +58,7 @@ const SubmitText = ((props) => {
         .then(({data}) => {
             console.log("DATA", data.data)
             sessionStorage.setItem("data", JSON.stringify(data.data))
+            sessionStorage.setItem("from", "text")
             history.push("/result")
         })
         .catch((error) => {
