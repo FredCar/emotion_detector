@@ -126,7 +126,6 @@ def predict():
             "sents": sents,
             "detailed_results": detailed_results,
         }
-
         return {"data": data}
 
     return {"data": "Erreur"}
@@ -134,14 +133,34 @@ def predict():
 
 @app.route("/scrap_airbnb", methods=["POST"])
 @jwt_required()
-@cross_origin()
+# @cross_origin()
 def scrap_airbnb():
     if request.method == "POST":
         data = json.loads(request.data)
-        airbnb_scraper(data["url"])
-        print(data["url"])
-        return {"data": "Pppppssssssssssssstttttt"}
-    pass
+        all_comments = airbnb_scraper(data["url"])
+
+        translated_comments = preprocess.translate(all_comments)
+        translated_comments = translated_comments.split("<END>")
+
+        all_comments = all_comments.split("<END>")
+
+        tokens_list = preprocess.tokenize(translated_comments)
+        preds_list = model.predict(tokens_list)
+
+        best_result = model.best_result(preds_list)
+        detailed_results = model.detailed_results(preds_list, all_comments)
+
+        data = {
+            "best_result": str(best_result),
+            "detailed_results": detailed_results,
+            "original_text": all_comments,
+            "translated_text": translated_comments,
+            "phrases": all_comments,
+            "sents": translated_comments,
+        }
+        return {"data": data}
+    
+    return {"data": "Erreur"}
 
 
 if __name__ == "__main__":

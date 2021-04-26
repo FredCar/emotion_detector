@@ -60,6 +60,7 @@ const SubmitUrl = ((props) => {
         .then(({data}) => {
             console.log("DATA", data.data)
             sessionStorage.setItem("data", JSON.stringify(data.data))
+            setIsLoading(false)
             history.push("/result")
         })
         .catch((error) => {
