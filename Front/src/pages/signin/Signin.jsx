@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useHistory } from "react-router-dom";
-import { isExpired } from "react-jwt";
+import { isExpired, decodeToken } from "react-jwt";
 import Routing from "../../Routing";
 import axios from 'axios';
 import Button from '@material-ui/core/Button';
@@ -37,6 +37,7 @@ const Signin = (props) => {
     const [password, setPassword] = useState();
     const [confirmPassword, setConfirmPassword] = useState();
     const [alert, setAlert] = useState([]);
+    const userName = decodeToken(token).sub.username;
 
     const handleSubmit = () => {
         setAlert([])
@@ -69,7 +70,7 @@ const Signin = (props) => {
 
     return (
         !isExpired(token)
-            ? <h3>Vous êtes déjà connecté !</h3>
+            ? <h3><strong>{userName}</strong> : Vous êtes déjà connecté !</h3>
             : <>
                 {
                     alert.length > 0 && <>
