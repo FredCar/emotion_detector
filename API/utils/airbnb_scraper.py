@@ -8,7 +8,6 @@ options=webdriver.FirefoxOptions()
 options.add_argument('-headless')
 options.add_argument('-nosandbox')
 options.add_argument('-disable-dev_shm_usage')
-# options.binary_location("/usr/bin/firefox")
 
 driver = webdriver.Firefox(executable_path='/src/utils/web_driver/geckodriver', options=options)
 
@@ -36,11 +35,16 @@ def airbnb_scraper(url=url):
 
     comments = soupe.find_all("div", {"class": "_1gjypya"})
 
+    all_comments = ""
     for c in comments:
-        print(c.find("span").text)
-        print("===================")
+        try:
+            comment = c.find("span").text
+            all_comments += f"{comment}<END>"
+        except:
+            print("ERROR : comment >>> ", c)
 
     driver.quit()
+    return all_comments
 
 
 
