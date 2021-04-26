@@ -137,6 +137,11 @@ def predict():
 def scrap_airbnb():
     if request.method == "POST":
         data = json.loads(request.data)
+
+        if data["url"][:19] != "https://www.airbnb.":
+            print("<>><>>>> ", data["url"][:19])
+            return jsonify({"msg": "Adresse incorrecte !"}), 403
+
         all_comments = airbnb_scraper(data["url"])
 
         translated_comments = preprocess.translate(all_comments)
