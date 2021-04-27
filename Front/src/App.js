@@ -10,7 +10,7 @@ function App() {
   return (
     <HashRouter>
       <div className="App">
-        <Menu accessToken={localStorage.getItem("access_token")} />
+        <Menu />
         <br />
         <div className="container" >
           <Switch>

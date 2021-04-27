@@ -18,13 +18,18 @@ const useStyle = makeStyles({
     }
 })
 
-const Menu = (({accessToken, ...pros}) => {
+const Menu = ((pros) => {
     const classes = useStyle();
-    const [token, setToken] = useState(accessToken);
+    const [token, setToken] = useState();
     
     useEffect(() => {
         setInterval(() => {
-            setToken(localStorage.getItem("access_token"))
+            if (!isExpired(localStorage.getItem("access_token"))) {
+                setToken(localStorage.getItem("access_token"))
+            } else {
+                localStorage.removeItem("access_token")
+                setToken()
+            }
         }, [])
     }, 5000);
 
