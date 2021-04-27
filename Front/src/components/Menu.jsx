@@ -28,6 +28,22 @@ const Menu = (({accessToken, ...pros}) => {
         }, [])
     }, 5000);
 
+    const SignUp = () => {
+        const userName = decodeToken(token)?.sub.username;
+
+        if (!token && isExpired(token)) {
+            return (
+                <Button size="small" className={classes.button}>
+                    <a className="nav-link" href="/#signin">Inscription <span className="sr-only">(current)</span></a>
+                </Button>
+            )
+        } else {
+            return (
+                <span className="nav-link"><strong>{userName}</strong> : Vous êtes connecté</span>
+            )
+        }
+    }
+
     const LogButton = () => {
         if (!token && isExpired(token)) {
             return (
@@ -60,9 +76,7 @@ const Menu = (({accessToken, ...pros}) => {
                     </li>
                     <div className={classes.connexionDiv}>
                         <li className="nav-item active" className={classes.buttonLi}>
-                            <Button size="small" className={classes.button}>
-                                <a className="nav-link" href="/#signin">Inscription <span className="sr-only">(current)</span></a>
-                            </Button>
+                            <SignUp />
                         </li>
                         <li className="nav-item active"className={classes.buttonLi}>
                             <LogButton />                            

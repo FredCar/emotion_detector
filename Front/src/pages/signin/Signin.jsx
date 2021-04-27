@@ -37,7 +37,7 @@ const Signin = (props) => {
     const [password, setPassword] = useState();
     const [confirmPassword, setConfirmPassword] = useState();
     const [alert, setAlert] = useState([]);
-    const userName = decodeToken(token).sub.username;
+    const userName = decodeToken(token)?.sub.username;
 
     const handleSubmit = () => {
         setAlert([])
