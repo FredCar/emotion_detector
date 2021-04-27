@@ -22,7 +22,7 @@ const useStyle = makeStyles({
 const Submits = (props) => {
     const classes = useStyle();
     const [alert, setAlert] = useState([]);
-    const [choice, setChoice] = useState("airbnb")
+    const [choice, setChoice] = useState("url")
     let component = ""
 
     useEffect(() => {
@@ -39,7 +39,7 @@ const Submits = (props) => {
         case "text":
             component = <SubmitText setAlert={setAlert} />
             break
-        case "airbnb":
+        case "url":
             component = <SubmitUrl setAlert={setAlert} />
             break
     }
@@ -56,11 +56,11 @@ const Submits = (props) => {
             <div>
              <Button 
                     variant="contained"
-                    color={choice === "airbnb" ? "primary" : ""}
+                    color={choice === "url" ? "primary" : ""}
                     className={classes.choiceButton}
-                    onClick={() => setChoice("airbnb")}
+                    onClick={() => setChoice("url")}
                 >
-                    Avis AirBnB
+                    Avis clients
                 </Button>
 
                 <Button 
