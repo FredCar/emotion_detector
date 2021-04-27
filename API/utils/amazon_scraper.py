@@ -19,6 +19,8 @@ def amazon_scraper(url=url):
     driver.get(url)
     time.sleep(1)
 
+    title = driver.title
+
     rest_of_data = True
     while rest_of_data:
         try:
@@ -37,7 +39,7 @@ def amazon_scraper(url=url):
         time.sleep(1)
 
     driver.quit()
-    return all_reviews
+    return all_reviews, title
 
 
 

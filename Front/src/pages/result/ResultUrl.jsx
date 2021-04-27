@@ -7,7 +7,8 @@ const ResultUrl = (props) => {
 
     return (
         <>
-            <h1>URL</h1>
+            <h4><a href={data["url"]} target="_blank" >{data["title"]}</a></h4>
+            <br /> <br />
             <BestResult bestResult={data["best_result"]}/>
             <br /> <br />
             <ResultsTable detailedResults={data["detailed_results"]} phrases={data["phrases"]} />

@@ -143,9 +143,9 @@ def parse_url():
             return jsonify({"msg": "Adresse incorrecte !"}), 403
 
         if data["url"][:19] == "https://www.airbnb.":
-            all_comments = airbnb_scraper(data["url"])
+            all_comments, title = airbnb_scraper(data["url"])
         elif data["url"][:19] == "https://www.amazon.":
-            all_comments = amazon_scraper(data["url"])
+            all_comments, title = amazon_scraper(data["url"])
 
         translated_comments = preprocess.translate(all_comments)
         translated_comments = translated_comments.split("<END>")
@@ -159,6 +159,8 @@ def parse_url():
         detailed_results = model.detailed_results(preds_list, all_comments)
 
         data = {
+            "title": title,
+            "url": data["url"],
             "best_result": str(best_result),
             "detailed_results": detailed_results,
             "original_text": all_comments,

@@ -30,6 +30,7 @@ def airbnb_scraper(url=url):
             break
         time.sleep(0.5)
 
+    title = driver.title
     html = driver.page_source
     soupe = bs(html, "html.parser")
 
@@ -44,7 +45,7 @@ def airbnb_scraper(url=url):
             print("ERROR : comment >>> ", c)
 
     driver.quit()
-    return all_comments
+    return all_comments, title
 
 
 
