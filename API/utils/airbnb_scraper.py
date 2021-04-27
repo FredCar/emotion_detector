@@ -49,4 +49,4 @@ def airbnb_scraper(url=url):
 
 
 if __name__ == "__main__":
-    scrap_airbnb()
+    airbnb_scraper()
