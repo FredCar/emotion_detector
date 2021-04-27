@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { useState } from "react";
 import { useHistory } from "react-router-dom";
 import Routing from "../../Routing";
@@ -6,7 +6,6 @@ import axios from 'axios';
 import Button from '@material-ui/core/Button';
 import TextareaAutosize from '@material-ui/core/TextareaAutosize';
 import LinearProgress from '@material-ui/core/LinearProgress';
-import Alert from '@material-ui/lab/Alert';
 import { makeStyles } from '@material-ui/core/styles';
 
 const useStyle = makeStyles({
@@ -17,30 +16,13 @@ const useStyle = makeStyles({
       width: 485,
       margin: "auto",
   },
-  alert: {
-      width: 800,
-      margin: "auto",
-      marginBottom: 20,
-  },
 });
 
-const SubmitText = ((props) => {
+const SubmitText = (({setAlert}) => {
     const [text, setText] = useState();
     const [isLoading, setIsLoading] = useState(false);
-    const [alert, setAlert] = useState([]);
     const history = useHistory();
     const classes = useStyle();
-
-
-    useEffect(() => {
-        const passedAlertSeverity = sessionStorage.getItem("alert_severity")
-        const passedAlert = sessionStorage.getItem("alert")
-        if (passedAlertSeverity && passedAlert) {
-            setAlert([passedAlertSeverity, passedAlert])
-            sessionStorage.removeItem("alert")
-            sessionStorage.removeItem("alert_severity")
-        }
-    }, [])
     
 
     const handleSubmit = (() => {
@@ -76,13 +58,6 @@ const SubmitText = ((props) => {
 
     return (
         <>
-            {
-                alert.length > 0 && <>
-                <Alert severity={alert[0]} className={classes.alert} >
-                    {alert[1]}
-                </Alert>
-                </>
-            }
             <form>
                 <TextareaAutosize 
                     placeholder="Entrez votre texte içi..." 
