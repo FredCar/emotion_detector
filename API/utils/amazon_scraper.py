@@ -36,9 +36,7 @@ def amazon_scraper(url=url):
             driver.get(next_link)        
         time.sleep(1)
 
-
     driver.quit()
-
     return all_reviews
 
 
@@ -53,6 +51,6 @@ if __name__ == "__main__":
 
         i += 1
     
-    print("=======================")
-    print(len(all_reviews))
-    print("=======================")
+    print("========================")
+    print(f"  Nb of comments : {len(all_reviews)}")
+    print("========================")

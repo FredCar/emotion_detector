@@ -30,7 +30,7 @@ const SubmitUrl = (({setAlert}) => {
     const handleSubmit = (() => {
         setAlert([])
         setIsLoading(true)
-        let url = `${Routing.baseUrl}/scrap_airbnb`
+        let url = `${Routing.baseUrl}/scrap_url`
         let data = {
             "url" : text,
         };

@@ -49,4 +49,15 @@ def airbnb_scraper(url=url):
 
 
 if __name__ == "__main__":
-    airbnb_scraper()
+    all_comments = airbnb_scraper()
+    all_comments = all_comments.split("<END>")
+    i = 0
+    for review in all_comments:
+        print(f"== {i} =============")
+        print(review)
+
+        i += 1
+    
+    print("========================")
+    print(f"  Nb of comments : {len(all_comments)}")
+    print("========================")

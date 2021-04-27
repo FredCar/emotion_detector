@@ -13,6 +13,7 @@ from utils import config
 from utils.classes import *
 from utils.functions import *
 from utils.airbnb_scraper import *
+from utils.amazon_scraper import *
 
 
 app = Flask(__name__)
@@ -131,18 +132,20 @@ def predict():
     return {"data": "Erreur"}
 
 
-@app.route("/scrap_airbnb", methods=["POST"])
+@app.route("/scrap_url", methods=["POST"])
 @jwt_required()
 # @cross_origin()
-def scrap_airbnb():
+def scrap_url():
     if request.method == "POST":
         data = json.loads(request.data)
 
-        if data["url"][:19] != "https://www.airbnb.":
-            print("<>><>>>> ", data["url"][:19])
+        if data["url"][:19] not in ["https://www.airbnb.", "https://www.amazon."]:
             return jsonify({"msg": "Adresse incorrecte !"}), 403
 
-        all_comments = airbnb_scraper(data["url"])
+        if data["url"][:19] == "https://www.airbnb.":
+            all_comments = airbnb_scraper(data["url"])
+        elif data["url"][:19] == "https://www.amazon.":
+            all_comments = amazon_scraper(data["url"])
 
         translated_comments = preprocess.translate(all_comments)
         translated_comments = translated_comments.split("<END>")
