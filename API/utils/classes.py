@@ -16,6 +16,7 @@ class Preprocess:
 
 
     def clean(self, original_text):
+        # TODO Gérer les "..."
         quotes = ["'", '"']
         if original_text[0] in quotes:
             original_text = original_text[1:]

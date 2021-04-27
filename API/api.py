@@ -99,10 +99,10 @@ def login():
         })
     
 
-@app.route("/predict", methods=["POST"])
+@app.route("/parse_text", methods=["POST"])
 @jwt_required()
 @cross_origin()
-def predict():
+def parse_text():
     if request.method == "POST": 
         original_text = request.data
         original_text = json.loads(original_text)
@@ -132,10 +132,10 @@ def predict():
     return {"data": "Erreur"}
 
 
-@app.route("/scrap_url", methods=["POST"])
+@app.route("/parse_url", methods=["POST"])
 @jwt_required()
 # @cross_origin()
-def scrap_url():
+def parse_url():
     if request.method == "POST":
         data = json.loads(request.data)
 

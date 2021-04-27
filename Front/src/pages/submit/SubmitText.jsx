@@ -28,7 +28,7 @@ const SubmitText = (({setAlert}) => {
     const handleSubmit = (() => {
         setAlert([])
         setIsLoading(true)
-        let url = `${Routing.baseUrl}/predict`
+        let url = `${Routing.baseUrl}/parse_text`
         let data = {
             "text" : text,
         };
