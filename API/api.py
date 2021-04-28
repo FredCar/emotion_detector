@@ -1,4 +1,5 @@
 import re
+import datetime
 from flask import Flask, request, jsonify, json
 from flask_sqlalchemy import SQLAlchemy
 from flask_jwt_extended import create_access_token
@@ -34,9 +35,29 @@ class User(db.Model):
     username = db.Column(db.String(80), unique=True, nullable=False)
     email = db.Column(db.String(120), unique=True, nullable=False)
     password = db.Column(db.String(120), nullable=False)
+    
+    # TODO drop table, rename to querys and create_all
+    requests = db.relationship("Query", backref="user")
 
     def __repr__(self):
         return f'<User {self.username}>'
+
+
+# TODO Créer une table intermediaire ?? ou pas !!
+
+
+class Query(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    created_at = db.Column(db.DateTime, default=datetime.datetime.utcnow)
+    title = db.Column(db.String(255), nullable=False)
+    url = db.Column(db.String(500))
+    origin_text = db.Column(db.Text, nullable=False)
+    best_result = db.Column(db.String(25), nullable=False)
+    detailled_result = db.Column(db.Text, nullable=False)
+    user_id = db.Column(db.Integer, db.ForeignKey("user.id"))
+
+    def __repr__(self):
+        return f'<Query {self.title}>'
 
 
 preprocess = Preprocess()
@@ -72,7 +93,7 @@ def join():
         db.session.add(user)
         db.session.commit()
 
-        access_token = create_access_token(identity=data["email"])
+        access_token = create_access_token(identity={"email": data["email"], "username": data["username"]})
         return jsonify({
             "msg": f"Compte de {data['username']} créé avec succés",
             "access_token": access_token,
@@ -136,6 +157,7 @@ def parse_text():
 @jwt_required()
 # @cross_origin()
 def parse_url():
+    print(get_jwt_identity()["username"], " <<< TOKEN IDENTITY >>>", type(get_jwt_identity()))
     if request.method == "POST":
         data = json.loads(request.data)
 
@@ -157,6 +179,20 @@ def parse_url():
 
         best_result = model.best_result(preds_list)
         detailed_results = model.detailed_results(preds_list, all_comments)
+
+        # Inserting in db
+        user = User.query.filter_by(username=get_jwt_identity()["username"]).first()
+        print(user.id, " >>> USER >>> ", user)
+        query = Query(
+            title=title,
+            url=data["url"],
+            origin_text=all_comments,
+            best_result=str(best_result),
+            detailled_result=jsonify(detailed_results),
+            user=user
+        )
+        db.session.add(query)
+        db.session.commit()
 
         data = {
             "title": title,
