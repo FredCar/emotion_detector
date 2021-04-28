@@ -35,9 +35,8 @@ class User(db.Model):
     username = db.Column(db.String(80), unique=True, nullable=False)
     email = db.Column(db.String(120), unique=True, nullable=False)
     password = db.Column(db.String(120), nullable=False)
-    
-    # TODO drop table, rename to querys and create_all
-    requests = db.relationship("Query", backref="user")
+
+    querys = db.relationship("Query", backref="user")
 
     def __repr__(self):
         return f'<User {self.username}>'
@@ -50,10 +49,10 @@ class Query(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     created_at = db.Column(db.DateTime, default=datetime.datetime.utcnow)
     title = db.Column(db.String(255), nullable=False)
-    url = db.Column(db.String(500))
+    url = db.Column(db.Text)
     origin_text = db.Column(db.Text, nullable=False)
     best_result = db.Column(db.String(25), nullable=False)
-    detailled_result = db.Column(db.Text, nullable=False)
+    detailed_result = db.Column(db.Text, nullable=False)
     user_id = db.Column(db.Integer, db.ForeignKey("user.id"))
 
     def __repr__(self):
@@ -157,7 +156,6 @@ def parse_text():
 @jwt_required()
 # @cross_origin()
 def parse_url():
-    print(get_jwt_identity()["username"], " <<< TOKEN IDENTITY >>>", type(get_jwt_identity()))
     if request.method == "POST":
         data = json.loads(request.data)
 
@@ -165,30 +163,29 @@ def parse_url():
             return jsonify({"msg": "Adresse incorrecte !"}), 403
 
         if data["url"][:19] == "https://www.airbnb.":
-            all_comments, title = airbnb_scraper(data["url"])
+            all_comments_str, title = airbnb_scraper(data["url"])
         elif data["url"][:19] == "https://www.amazon.":
-            all_comments, title = amazon_scraper(data["url"])
+            all_comments_str, title = amazon_scraper(data["url"])
 
-        translated_comments = preprocess.translate(all_comments)
+        translated_comments = preprocess.translate(all_comments_str)
         translated_comments = translated_comments.split("<END>")
 
-        all_comments = all_comments.split("<END>")
+        all_comments_list = all_comments_str.split("<END>")
 
         tokens_list = preprocess.tokenize(translated_comments)
         preds_list = model.predict(tokens_list)
 
         best_result = model.best_result(preds_list)
-        detailed_results = model.detailed_results(preds_list, all_comments)
+        detailed_results = model.detailed_results(preds_list, all_comments_list)
 
         # Inserting in db
         user = User.query.filter_by(username=get_jwt_identity()["username"]).first()
-        print(user.id, " >>> USER >>> ", user)
         query = Query(
             title=title,
             url=data["url"],
-            origin_text=all_comments,
-            best_result=str(best_result),
-            detailled_result=jsonify(detailed_results),
+            origin_text=all_comments_str,
+            best_result=best_result,
+            detailed_result=json.dumps(detailed_results),
             user=user
         )
         db.session.add(query)
@@ -199,9 +196,9 @@ def parse_url():
             "url": data["url"],
             "best_result": str(best_result),
             "detailed_results": detailed_results,
-            "original_text": all_comments,
+            "original_text": all_comments_str,
             "translated_text": translated_comments,
-            "phrases": all_comments,
+            "phrases": all_comments_list,
             "sents": translated_comments,
         }
         return {"data": data}
