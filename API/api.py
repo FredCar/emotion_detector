@@ -178,7 +178,7 @@ def parse_url():
         best_result = model.best_result(preds_list)
         detailed_results = model.detailed_results(preds_list, all_comments_list)
 
-        # Inserting in db
+        # Insertion in db
         user = User.query.filter_by(username=get_jwt_identity()["username"]).first()
         query = Query(
             title=title,
