@@ -42,9 +42,6 @@ class User(db.Model):
         return f'<User {self.username}>'
 
 
-# TODO Créer une table intermediaire ?? ou pas !!
-
-
 class Query(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     created_at = db.Column(db.DateTime, default=datetime.datetime.utcnow)
@@ -104,19 +101,36 @@ def login():
     if request.method == "POST":
         data = json.loads(request.data)
 
-        users = User.query.filter_by(email=data["email"], password=hash_password(data["password"])).all()
-        if len(users) == 0:
+        user = User.query.filter_by(email=data["email"], password=hash_password(data["password"])).first()
+        if user == None:
             return jsonify({"msg": "Email ou mot de passe incorrect"}), 401
-        # Ne devrait jamais se déclencher
-        if len(users) > 1:
-            return jsonify({"msg": "Erreur !!"}), 400
 
-        user = users[0]
         access_token = create_access_token(identity={"email": user.email, "username": user.username})
         return jsonify({
             "msg": f"{user.username} : vous êtes bien connecté",
             "access_token" : access_token,
         })
+
+
+# TODO A supprimer après tests
+# @app.route("/login", methods=["POST"])
+# def login():
+#     if request.method == "POST":
+#         data = json.loads(request.data)
+
+#         users = User.query.filter_by(email=data["email"], password=hash_password(data["password"])).all()
+#         if len(users) == 0:
+#             return jsonify({"msg": "Email ou mot de passe incorrect"}), 401
+#         # Ne devrait jamais se déclencher
+#         if len(users) > 1:
+#             return jsonify({"msg": "Erreur !!"}), 400
+
+#         user = users[0]
+#         access_token = create_access_token(identity={"email": user.email, "username": user.username})
+#         return jsonify({
+#             "msg": f"{user.username} : vous êtes bien connecté",
+#             "access_token" : access_token,
+#         })
     
 
 @app.route("/parse_text", methods=["POST"])
