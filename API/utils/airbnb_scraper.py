@@ -11,10 +11,8 @@ options.add_argument('-disable-dev_shm_usage')
 
 driver = webdriver.Firefox(executable_path='/src/utils/web_driver/geckodriver', options=options)
 
-url = "https://www.airbnb.fr/rooms/24277412/reviews?federated_search_id=1ca648aa-c654-458f-90b9-3204f1f2872f&source_impression_id=p3_1619175860_c1wLdsytxVIKViXc&guests=1&adults=1"
 
-
-def airbnb_scraper(url=url):
+def airbnb_scraper(url):
     # TODO Aller chercher le lien des commentaires depuis la page principale de l'annoce
     driver.get(url)
     time.sleep(5)
@@ -50,7 +48,9 @@ def airbnb_scraper(url=url):
 
 
 if __name__ == "__main__":
-    all_comments = airbnb_scraper()
+    url_test = "https://www.airbnb.fr/rooms/24277412/reviews?federated_search_id=1ca648aa-c654-458f-90b9-3204f1f2872f&source_impression_id=p3_1619175860_c1wLdsytxVIKViXc&guests=1&adults=1"
+
+    all_comments = airbnb_scraper(url_test)
     all_comments = all_comments.split("<END>")
     i = 0
     for review in all_comments:

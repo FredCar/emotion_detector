@@ -1,5 +1,4 @@
 from selenium import webdriver
-from bs4 import BeautifulSoup as bs
 import time
 import re
 
@@ -10,10 +9,8 @@ options.add_argument('-disable-dev_shm_usage')
 
 driver = webdriver.Firefox(executable_path='/src/utils/web_driver/geckodriver', options=options)
 
-url = "https://www.amazon.fr/Jour-dapr%C3%A8s-Philippe-Villiers/product-reviews/222646199X/ref=cm_cr_dp_d_show_all_btm?ie=UTF8&reviewerType=all_reviews"
 
-
-def amazon_scraper(url=url):
+def amazon_scraper(url):
     all_reviews = ""
 
     driver.get(url)
@@ -44,7 +41,9 @@ def amazon_scraper(url=url):
 
 
 if __name__ == "__main__":
-    all_reviews = amazon_scraper()
+    url_test = "https://www.amazon.fr/Jour-dapr%C3%A8s-Philippe-Villiers/product-reviews/222646199X/ref=cm_cr_dp_d_show_all_btm?ie=UTF8&reviewerType=all_reviews"
+
+    all_reviews = amazon_scraper(url_test)
     all_reviews = all_reviews.split("<END>")
     i = 0
     for review in all_reviews:
