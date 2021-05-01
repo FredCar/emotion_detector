@@ -48,7 +48,6 @@ class Preprocess:
 
 class Model:
     def __init__(self, path="/src/model/bert_model.h5"):
-        self.model = self.__load_model(path)
         self.emotions = {
             'tristesse': '0',
             'colère': '1',
@@ -57,19 +56,18 @@ class Model:
             'peur': '4',
             'joie': '5',
         }
+        self.model = self.__load_model(path)
         self.emotions_reverse = {k : v for v, k in self.emotions.items()}
 
 
     def __load_model(self, path):
-        model_save_path = path
-        num_labels = 6
         loss = tf.keras.losses.SparseCategoricalCrossentropy(from_logits=True)
         optimizer = tf.keras.optimizers.Adam(learning_rate=2e-5,epsilon=1e-08)
         metric = tf.keras.metrics.SparseCategoricalAccuracy('accuracy')
         
-        model = TFBertForSequenceClassification.from_pretrained('bert-base-uncased',num_labels=num_labels)
+        model = TFBertForSequenceClassification.from_pretrained('bert-base-uncased',num_labels=len(self.emotions))
         model.compile(loss=loss,optimizer=optimizer, metrics=[metric])
-        model.load_weights(model_save_path)
+        model.load_weights(path)
 
         print("==================================")
         print("\t  MODEL STARTED")
