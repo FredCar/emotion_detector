@@ -30,6 +30,7 @@ def airbnb_scraper(url):
 
     title = driver.title
     html = driver.page_source
+    # TODO Faire sans BeautifulSoup
     soupe = bs(html, "html.parser")
 
     comments = soupe.find_all("div", {"class": "_1gjypya"})
