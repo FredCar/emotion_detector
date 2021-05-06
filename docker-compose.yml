@@ -31,7 +31,7 @@ services:
     networks:
       - emotion_detector_network
     volumes:
-      # TODO Changer l'adresse pour celle du server de deployement
+      # TODO Changer l'adresse pour celle du serveur de deployement
       - /home/fred/Formation/Certifs/detecteur_emotion/emotion_detector/Database/data:/var/lib/mysql
     
   adminer:

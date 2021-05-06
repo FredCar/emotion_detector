@@ -85,6 +85,23 @@ class Model:
             
         return preds_list
 
+
+    def normalize(self, results):
+        print("========================")
+        print(results)
+
+        if min(results) < 0:
+            normalized_results = [(float(i)+abs(min(results)))/(max(results)+abs(min(results))) for i in results]
+        else:
+            normalized_results = [float(i)/sum(results) for i in results]
+        
+        normalized_results = [round(i, 2) for i in normalized_results]
+
+        print("NORM : ", normalized_results)
+        print("========================\n")
+
+        return normalized_results
+
     
     def best_result(self, preds_list):
         results_list = []
@@ -104,6 +121,7 @@ class Model:
         for i in range(len(preds_list)):
             detailed_results[phrases[i]] = {}
             for j in range(len(emotions_list)):
-                detailed_results[phrases[i]][emotions_list[j]] = round(float(preds_list[i][j]), 2)
+                preds_normalized = self.normalize(preds_list[i])
+                detailed_results[phrases[i]][emotions_list[j]] = preds_normalized[j]
 
         return detailed_results
