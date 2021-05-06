@@ -186,6 +186,14 @@ def parse_url():
         translated_comments = translated_comments.split("<END>")
 
         all_comments_list = all_comments_str.split("<END>")
+        # TODO Try to debug translation when are multi languages
+        for com, trans in zip(all_comments_list, translated_comments):
+            print("ORIGINAL >>> \n", com)
+            print("TRANSLATION >>> \n", trans)
+            print("========================================================================")
+        print("TEXT >>> \n", all_comments_str, type(all_comments_str))
+        print("========================================================================")
+        print("========================================================================")
 
         tokens_list = preprocess.tokenize(translated_comments)
         preds_list = model.predict(tokens_list)
@@ -198,7 +206,7 @@ def parse_url():
         query = Query(
             title=title,
             url=data["url"],
-            origin_text=all_comments_str,
+            origin_text=str(all_comments_str),
             best_result=best_result,
             detailed_result=json.dumps(detailed_results),
             user=user
