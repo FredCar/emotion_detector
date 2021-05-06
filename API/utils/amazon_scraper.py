@@ -28,7 +28,8 @@ def amazon_scraper(url):
     title = driver.title
 
     rest_of_data = True
-    while rest_of_data:
+    nb_review = 0
+    while rest_of_data and nb_review < 100:
         try:
             next_link = driver.find_element_by_class_name("a-last")
             next_link = next_link.find_element_by_tag_name("a")
@@ -39,6 +40,7 @@ def amazon_scraper(url):
         reviews = driver.find_elements_by_class_name("review-text-content")
         for review in reviews:
             all_reviews += f"{review.text}<END>"
+            nb_review += 1
 
         if rest_of_data:
             driver.get(next_link)        

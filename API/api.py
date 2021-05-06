@@ -192,8 +192,8 @@ def parse_url():
             print("TRANSLATION >>> \n", trans)
             print("========================================================================")
         print("TEXT >>> \n", all_comments_str, type(all_comments_str))
-        print("========================================================================")
-        print("========================================================================")
+        print("> ========================================================================")
+        print(">> =======================================================================")
 
         tokens_list = preprocess.tokenize(translated_comments)
         preds_list = model.predict(tokens_list)
@@ -206,7 +206,7 @@ def parse_url():
         query = Query(
             title=title,
             url=data["url"],
-            origin_text=str(all_comments_str),
+            origin_text=all_comments_str[:500],
             best_result=best_result,
             detailed_result=json.dumps(detailed_results),
             user=user
