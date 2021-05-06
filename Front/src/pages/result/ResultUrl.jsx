@@ -1,6 +1,7 @@
 import React from "react";
 import BestResult from "./BestResult";
 import ResultsTable from "./ResultsTable";
+import ResultsGraph from "./ResultsGraph";
 
 const ResultUrl = (props) => {
     const data = JSON.parse(sessionStorage.getItem("data"))
@@ -10,6 +11,8 @@ const ResultUrl = (props) => {
             <h4><a href={data["url"]} target="_blank" >{data["title"]}</a></h4>
             <br /> <br />
             <BestResult bestResult={data["best_result"]}/>
+            <br /> <br />
+            <ResultsGraph />
             <br /> <br />
             <ResultsTable detailedResults={data["detailed_results"]} phrases={data["phrases"]} />
         </>

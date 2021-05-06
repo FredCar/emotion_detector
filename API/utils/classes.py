@@ -87,18 +87,12 @@ class Model:
 
 
     def normalize(self, results):
-        print("========================")
-        print(results)
-
         if min(results) < 0:
             normalized_results = [(float(i)+abs(min(results)))/(max(results)+abs(min(results))) for i in results]
         else:
             normalized_results = [float(i)/sum(results) for i in results]
         
         normalized_results = [round(i, 2) for i in normalized_results]
-
-        print("NORM : ", normalized_results)
-        print("========================\n")
 
         return normalized_results
 
