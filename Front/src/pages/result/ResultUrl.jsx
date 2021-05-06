@@ -10,9 +10,9 @@ const ResultUrl = (props) => {
         <>
             <h4><a href={data["url"]} target="_blank" >{data["title"]}</a></h4>
             <br /> <br />
-            <BestResult bestResult={data["best_result"]}/>
+            <BestResult bestResult={data["best_result"]} />
             <br /> <br />
-            <ResultsGraph />
+            <ResultsGraph detailedResults={data["detailed_results"]} />
             <br /> <br />
             <ResultsTable detailedResults={data["detailed_results"]} phrases={data["phrases"]} />
         </>
