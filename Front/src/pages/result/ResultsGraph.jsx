@@ -4,8 +4,8 @@ import { makeStyles } from "@material-ui/core/styles";
 
 const useStyle = makeStyles({
     pie: {
-        width: 500,
-        height: 500,
+        width: 550,
+        height: 550,
         margin: "auto",
     },
 })
