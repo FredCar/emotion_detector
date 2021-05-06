@@ -1,11 +1,20 @@
 from selenium import webdriver
 import time
 import re
+import random
+from http_request_randomizer.requests.proxy.requestProxy import RequestProxy
 
-options=webdriver.FirefoxOptions()
+req_proxy = RequestProxy() #you may get different number of proxy when  you run this at each time
+proxies = req_proxy.get_proxy_list() #this will create proxy lis
+
+index = random.randint(0, len(proxies))
+PROXY = proxies[index].get_address()
+
+options = webdriver.FirefoxOptions()
 options.add_argument('-headless')
 options.add_argument('-nosandbox')
 options.add_argument('-disable-dev_shm_usage')
+options.add_argument(f'--proxy-server={PROXY}')
 
 driver = webdriver.Firefox(executable_path='/src/utils/web_driver/geckodriver', options=options)
 
