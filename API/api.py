@@ -182,10 +182,7 @@ def parse_url():
             all_comments_str, title = amazon_scraper(data["url"])
 
         # TODO Conroller la traduction par bloc multilingue
-        print(all_comments_str)
-        print("==========================")
         translated_comments = preprocess.translate(all_comments_str)
-        print(translated_comments)
         translated_comments = translated_comments.split("<END>")
 
         all_comments_list = all_comments_str.split("<END>")

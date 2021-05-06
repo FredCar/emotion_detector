@@ -1,7 +1,17 @@
 import React from "react";
 import { Pie } from "react-chartjs-2";
+import { makeStyles } from "@material-ui/core/styles";
+
+const useStyle = makeStyles({
+    pie: {
+        width: 500,
+        height: 500,
+        margin: "auto",
+    },
+})
 
 const ResultsGraph = ({detailedResults, ...props}) => {
+    const styles = useStyle();
     const labels = []
     for (const res in detailedResults[Object.keys(detailedResults)[0]]) {
         labels.push(res)
@@ -41,11 +51,9 @@ const ResultsGraph = ({detailedResults, ...props}) => {
 
     return (
         <>
-            <div style={{ textAlign: "center" }}>
-                <h4>Émotions reconnues dans les avis analysés</h4>
+            <h4>Émotions reconnues dans les avis analysés</h4>
+            <div className={styles.pie} >
                 <Pie
-                width={10}
-                height={10}
                 data={{
                     labels: labels,
                     datasets: [
