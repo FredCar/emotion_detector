@@ -29,7 +29,7 @@ const ResultsGraph = ({detailedResults, ...props}) => {
 
     const data = {
         "amour": 0,
-        "colere": 0,
+        "colère": 0,
         "joie": 0,
         "peur": 0,
         "surprise": 0,
@@ -49,6 +49,8 @@ const ResultsGraph = ({detailedResults, ...props}) => {
         }
         data[label] = data[label] + 1
     }
+
+    console.log("data", data)
 
     return (
         <>
