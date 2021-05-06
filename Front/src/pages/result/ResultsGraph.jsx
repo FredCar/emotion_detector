@@ -12,6 +12,7 @@ const useStyle = makeStyles({
 
 const ResultsGraph = ({detailedResults, ...props}) => {
     const styles = useStyle();
+    const numberOfComments = Object.keys(detailedResults).length
     const labels = []
     for (const res in detailedResults[Object.keys(detailedResults)[0]]) {
         labels.push(res)
@@ -51,7 +52,7 @@ const ResultsGraph = ({detailedResults, ...props}) => {
 
     return (
         <>
-            <h4>Émotions reconnues dans les avis analysés</h4>
+            <h4>Émotions reconnues dans les {numberOfComments} avis analysés</h4>
             <div className={styles.pie} >
                 <Pie
                 data={{
