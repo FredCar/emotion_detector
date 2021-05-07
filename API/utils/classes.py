@@ -29,8 +29,9 @@ class Preprocess:
 
 
     def translate(self, reviews):
-        google_max_len = 10000
-        reviews_list = reviews.split("<END>")
+        google_max_len = 1000
+        reviews_list = reviews.split("<END>")[:-1]
+
         to_translate = ""
         translated = ""
 
@@ -44,7 +45,7 @@ class Preprocess:
 
         translated += self.translator.translate(to_translate, dest="en").text
 
-        return translated[:-6]
+        return translated
 
 
     def tokenize(self, sents):
@@ -126,11 +127,10 @@ class Model:
 
     
     def detailed_results(self, preds_list, phrases):
-        print(f"\t >>> preds_list >>> {len(preds_list)} <<<\n\t >>> phrases >>> {len(phrases)} <<<")
         emotions_list = [x for x in self.emotions.keys()]
         
         detailed_results = {}
-        for i in range(len(phrases)-2):
+        for i in range(len(phrases)):
             detailed_results[phrases[i]] = {}
             for j in range(len(emotions_list)):
                 preds_normalized = self.normalize(preds_list[i])

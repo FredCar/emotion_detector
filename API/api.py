@@ -182,23 +182,11 @@ def parse_url():
         elif data["url"][:19] == "https://www.amazon.":
             all_comments_str, title = amazon_scraper(data["url"])
 
+        all_comments_list = all_comments_str.split("<END>")[:-1]
+
         # Translation of the reviews       
         translated_comments = preprocess.translate(all_comments_str)
-        translated_comments = translated_comments.split("<END>")
-
-        all_comments_list = all_comments_str.split("<END>")
-
-
-        # TODO Try to debug translation when are multi languages
-        for com, trans in zip(all_comments_list, translated_comments):
-            print("ORIGINAL >>> \n", com)
-            print("TRANSLATION >>> \n", trans)
-            print("========================================================================")
-        print("TEXT >>> \n", all_comments_str[:500], type(all_comments_str))
-        print("> ========================================================================")
-        print(">> =======================================================================")
-
-
+        translated_comments = translated_comments.split("<END>")[:-1]
 
         tokens_list = preprocess.tokenize(translated_comments)
         preds_list = model.predict(tokens_list)

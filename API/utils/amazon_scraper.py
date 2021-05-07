@@ -30,7 +30,7 @@ def amazon_scraper(url):
     rest_of_data = True
     nb_review = 0
     # TODO Raise the limitation of number
-    while rest_of_data and nb_review < 2:
+    while rest_of_data and nb_review < 150:
         reviews = []
         try:
             next_link = driver.find_element_by_class_name("a-last")
@@ -39,14 +39,19 @@ def amazon_scraper(url):
         except:
             rest_of_data = False
 
-        # Try to find the translation made by Amazon
-        reviews = driver.find_elements_by_class_name("cr-translated-review-content")
-        if len(reviews) == 0:
-            reviews = driver.find_elements_by_class_name("review-text-content")
 
+        reviews = driver.find_elements_by_class_name("review-text-content")
         for review in reviews:
-            all_reviews += f"{review.text}<END>"
-            nb_review += 1
+            try:
+                # TODO Try to find the translation made by Amazon
+                translation = review.find_element_by_class_name("cr-translated-review-content")
+                continue # Scrap only French comments
+                # BUG Translated reviews are empty
+                # all_reviews += f"{translation.text}<END>"
+                # nb_review += 1
+            except:
+                all_reviews += f"{review.text}<END>"
+                nb_review += 1
 
         if rest_of_data:
             driver.get(next_link)        
