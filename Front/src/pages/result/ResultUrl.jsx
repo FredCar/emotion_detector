@@ -14,7 +14,7 @@ const ResultUrl = (props) => {
             <br /> <br />
             <ResultsGraph detailedResults={data["detailed_results"]} />
             <br /> <br />
-            <ResultsTable detailedResults={data["detailed_results"]} phrases={data["phrases"]} />
+            <ResultsTable detailedResults={data["detailed_results"]} phrases={data["phrases"]} sents={data["sents"]} />
         </>
     )
 };

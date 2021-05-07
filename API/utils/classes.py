@@ -23,11 +23,23 @@ class Preprocess:
         if original_text[-1] in quotes:
             original_text = original_text[:-1]
         clean_text = original_text
+
         return clean_text
 
 
-    def translate(self, sent):
-        translated = self.translator.translate(sent, dest="en").text
+    def translate(self, reviews):
+        google_max_len = 1000
+        if len(reviews) <= google_max_len:
+            translated = self.translator.translate(reviews, dest="en").text
+        else:
+            translated = ""
+            for x in range(len(reviews)//google_max_len):
+                try:
+                    res = self.translator.translate(reviews[x*google_max_len:(x+1)*google_max_len], dest="en").text
+                    translated += f"{res} - "
+                except:
+                    pass
+
         return translated
 
 
@@ -42,6 +54,7 @@ class Preprocess:
                 return_attention_mask = True
             )
             tokens_list.append(tokenized)
+
         return tokens_list
 
 

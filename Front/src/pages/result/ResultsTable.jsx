@@ -24,7 +24,7 @@ const useStyle = makeStyles({
     // },
 })
 
-const ResultsTable = ({detailedResults, phrases}) => {
+const ResultsTable = ({detailedResults, phrases, sents}) => {
     const classes = useStyle();
 
     let headers = []
@@ -44,7 +44,7 @@ const ResultsTable = ({detailedResults, phrases}) => {
 
         rows.push(
             <TableRow>
-                <TableCell className={classes.td} ><strong>{phrases[i]}</strong></TableCell>
+                <TableCell className={classes.td} ><strong>{phrases[i]}</strong> - - {sents[i]}</TableCell>
                 {column}
             </TableRow>
         )
