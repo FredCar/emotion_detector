@@ -27,7 +27,7 @@ def test_clean_function():
 
 def test_translate_function():
     result = PREPROCESS.translate(SENT)
-    assert result == "Hello everybody"
+    assert result in ["Hello everybody", "Hello everyone"]
 
 
 def test_googletranslate_api_disponibility():

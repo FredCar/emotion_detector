@@ -44,7 +44,7 @@ class Preprocess:
 
         translated += self.translator.translate(to_translate, dest="en").text
 
-        return translated
+        return translated[:-6]
 
 
     def tokenize(self, sents):
@@ -126,10 +126,11 @@ class Model:
 
     
     def detailed_results(self, preds_list, phrases):
+        print(f"\t >>> preds_list >>> {len(preds_list)} <<<\n\t >>> phrases >>> {len(phrases)} <<<")
         emotions_list = [x for x in self.emotions.keys()]
         
         detailed_results = {}
-        for i in range(len(phrases)-1):
+        for i in range(len(phrases)-2):
             detailed_results[phrases[i]] = {}
             for j in range(len(emotions_list)):
                 preds_normalized = self.normalize(preds_list[i])
