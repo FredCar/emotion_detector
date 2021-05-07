@@ -29,7 +29,7 @@ def amazon_scraper(url):
 
     rest_of_data = True
     nb_review = 0
-    # TODO Raise the limitation of number
+    # TODO Raise the limitation of number caused by DB limitation for detailledResults
     while rest_of_data and nb_review < 150:
         reviews = []
         try:

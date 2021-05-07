@@ -26,7 +26,8 @@ def test_clean_function():
 
 
 def test_translate_function():
-    result = PREPROCESS.translate(SENT)
+    result = PREPROCESS.translate(f"{SENT}<END>")
+    result = result.split("<END>")[0][:-1]
     assert result in ["Hello everybody", "Hello everyone"]
 
 
