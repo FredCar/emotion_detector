@@ -7,6 +7,7 @@ from googletrans import Translator
 
 class Preprocess:
     def __init__(self):
+        # TODO Add proxies
         self.translator = Translator(raise_exception=False)
         self.tokenizer = BertTokenizer.from_pretrained('bert-base-uncased', do_lower_case=True)
 
@@ -28,17 +29,20 @@ class Preprocess:
 
 
     def translate(self, reviews):
-        google_max_len = 1000
-        if len(reviews) <= google_max_len:
-            translated = self.translator.translate(reviews, dest="en").text
-        else:
-            translated = ""
-            for x in range(len(reviews)//google_max_len):
-                try:
-                    res = self.translator.translate(reviews[x*google_max_len:(x+1)*google_max_len], dest="en").text
-                    translated += f"{res} - "
-                except:
-                    pass
+        google_max_len = 10000
+        reviews_list = reviews.split("<END>")
+        to_translate = ""
+        translated = ""
+
+        for review in reviews_list:
+            # HACK Split text to pass under the limit by number of character
+            if (len(to_translate) + len(review)) <= google_max_len:
+                to_translate += f"{review}<END>"
+            else:
+                translated += self.translator.translate(to_translate, dest="en").text
+                to_translate = f"{review}<END>"
+
+        translated += self.translator.translate(to_translate, dest="en").text
 
         return translated
 
@@ -125,7 +129,7 @@ class Model:
         emotions_list = [x for x in self.emotions.keys()]
         
         detailed_results = {}
-        for i in range(len(preds_list)):
+        for i in range(len(phrases)-1):
             detailed_results[phrases[i]] = {}
             for j in range(len(emotions_list)):
                 preds_normalized = self.normalize(preds_list[i])
