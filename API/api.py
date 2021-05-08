@@ -110,6 +110,11 @@ def login():
         })
 
 
+@app.route("/account", methods=["GET"])
+def account():
+    return jsonify({"data": "TEESSSTTTT"})
+
+
 @app.route("/parse_text", methods=["POST"])
 @jwt_required()
 @cross_origin()
