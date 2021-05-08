@@ -50,8 +50,20 @@ class Query(db.Model):
     best_result = db.Column(db.String(25), nullable=False)
     user_id = db.Column(db.Integer, db.ForeignKey("user.id"))
 
+    results = db.relationship("Result", backref="query")
+
     def __repr__(self):
         return f'<Query {self.title}>'
+
+
+class Result(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    review = db.Column(db.Text, nullable=False)
+    score = db.Column(db.String(255), nullable=False)
+    query_id = db.Column(db.Integer, db.ForeignKey("query.id"))
+
+    def __repr__(self):
+        return f'<Result {self.review}>'
 
 
 preprocess = Preprocess()
