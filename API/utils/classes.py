@@ -16,7 +16,6 @@ proxies = req_proxy.get_proxy_list()
 
 class Preprocess:
     def __init__(self):
-        # TODO Add proxies
         self.translator = Translator(raise_exception=False, proxies=proxies)
         self.tokenizer = BertTokenizer.from_pretrained('bert-base-uncased', do_lower_case=True)
 
@@ -39,22 +38,33 @@ class Preprocess:
 
     def translate(self, reviews):
         google_max_len = 5000
-        reviews_list = reviews.split("<END>")[:-1]
+        # reviews_list = reviews.split("<END>")[:-1]
 
-        to_translate = ""
-        translated = ""
+        translated = []
 
-        for review in reviews_list:
-            # HACK Split text to pass under the limit by number of character
-            if (len(to_translate) + len(review)) <= google_max_len:
-                to_translate += f"{review} <END> "
-            else:
-                translated += self.translator.translate(to_translate, dest="en").text
-                to_translate = f"{review} <END> "
+        translations = self.translator.translate(reviews, dest="en")
+        for translation in translations:
+            translated.append(translation.text)
 
-        translated += self.translator.translate(to_translate, dest="en").text
 
-        # BUG Translation don't work
+
+
+
+
+        # to_translate = ""
+        # translated = ""
+
+        # for review in reviews_list:
+        #     # HACK Split text to pass under the limit by number of character
+        #     if (len(to_translate) + len(review)) <= google_max_len:
+        #         to_translate += f"{review} <END> "
+        #     else:
+        #         translated += self.translator.translate(to_translate, dest="en").text
+        #         to_translate = f"{review} <END> "
+
+        # translated += self.translator.translate(to_translate, dest="en").text
+
+        # # BUG Translation don't work
 
         return translated
 

@@ -185,8 +185,8 @@ def parse_url():
         all_comments_list = all_comments_str.split("<END>")[:-1]
 
         # Translation of the reviews       
-        translated_comments = preprocess.translate(all_comments_str)
-        translated_comments = translated_comments.split("<END>")[:-1]
+        translated_comments = preprocess.translate(all_comments_list)
+        # translated_comments = translated_comments.split("<END>")[:-1]
 
 
 
