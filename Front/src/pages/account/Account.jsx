@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import axios from "axios";
 import Routing from "../../Routing";
 
@@ -9,7 +9,7 @@ const fetchData = () => {
     };
 
     axios.get(url, config)
-    .then((data) => {
+    .then(({data}) => {
         console.log("DATA", data)
     })
     .catch((error) => {
@@ -17,7 +17,13 @@ const fetchData = () => {
     })
 }
 
+
 const Account = (props) => {
+
+    useEffect(() => {
+        fetchData()
+    }, [])
+    
     return (
         <h1>Account</h1>
     )

@@ -111,8 +111,21 @@ def login():
 
 
 @app.route("/account", methods=["GET"])
+@jwt_required()
+# @cross_origin()
 def account():
-    return jsonify({"data": "TEESSSTTTT"})
+    if request.method == "GET":
+        user = User.query.filter_by(username=get_jwt_identity()["username"]).first()
+        # print(f"\n\n\n\t>>>\t{user.query.url}\t<<<\n\n\n")
+
+        queries = Query.query.filter_by(user=user).all()
+        # print(f"\n\n\n\t>>>\t{queries}\t<<<\n\n\n")
+        
+        return jsonify({
+            "data": "TEESSSTTTT",
+            "user": user.username,
+            # "queries": queries,
+        })
 
 
 @app.route("/parse_text", methods=["POST"])
