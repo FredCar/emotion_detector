@@ -1,14 +1,23 @@
 import re
+import random
 import tensorflow as tf
 from transformers import TFBertForSequenceClassification
 from transformers import BertTokenizer
 from googletrans import Translator
+from http_request_randomizer.requests.proxy.requestProxy import RequestProxy
+
+
+req_proxy = RequestProxy() #you may get different number of proxy when  you run this at each time
+proxies = req_proxy.get_proxy_list()
+
+# index = random.randint(0, len(proxies))
+# PROXY = proxies[index].get_address()
 
 
 class Preprocess:
     def __init__(self):
         # TODO Add proxies
-        self.translator = Translator(raise_exception=False)
+        self.translator = Translator(raise_exception=False, proxies=proxies)
         self.tokenizer = BertTokenizer.from_pretrained('bert-base-uncased', do_lower_case=True)
 
         print("==================================")
@@ -29,7 +38,7 @@ class Preprocess:
 
 
     def translate(self, reviews):
-        google_max_len = 1000
+        google_max_len = 5000
         reviews_list = reviews.split("<END>")[:-1]
 
         to_translate = ""
@@ -38,12 +47,14 @@ class Preprocess:
         for review in reviews_list:
             # HACK Split text to pass under the limit by number of character
             if (len(to_translate) + len(review)) <= google_max_len:
-                to_translate += f"{review}<END>"
+                to_translate += f"{review} <END> "
             else:
                 translated += self.translator.translate(to_translate, dest="en").text
-                to_translate = f"{review}<END>"
+                to_translate = f"{review} <END> "
 
         translated += self.translator.translate(to_translate, dest="en").text
+
+        # BUG Translation don't work
 
         return translated
 
@@ -127,6 +138,7 @@ class Model:
 
     
     def detailed_results(self, preds_list, phrases):
+        print(f"\t >>> preds_list >>> {len(preds_list)} <<<\n\t >>> phrases >>> {len(phrases)} <<<")
         emotions_list = [x for x in self.emotions.keys()]
         
         detailed_results = {}

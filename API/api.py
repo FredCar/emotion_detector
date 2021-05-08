@@ -188,6 +188,30 @@ def parse_url():
         translated_comments = preprocess.translate(all_comments_str)
         translated_comments = translated_comments.split("<END>")[:-1]
 
+
+
+        # TODO Understand why translated_comments list is shorter than all_comments_list
+        for x in translated_comments:
+            print(x)
+            print("=================================\n\n\n")
+
+
+        # HACK To avoid Index Error 
+        diff = len(all_comments_list) - len(translated_comments)
+        print(f"\n\n\n\t >>> \t DIFF = {diff} \t <<< \n\n\n")
+        if diff == 0:
+            pass
+        elif diff < 0: # translated_comments too long
+            for i in range(abs(diff)):
+                translated_comments.pop()
+        elif diff > 0: # all_comments_list too long
+            for i in range(abs(diff)):
+                all_comments_list.pop()
+
+
+
+
+
         tokens_list = preprocess.tokenize(translated_comments)
         preds_list = model.predict(tokens_list)
 
