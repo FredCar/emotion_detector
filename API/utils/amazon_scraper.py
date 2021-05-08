@@ -20,7 +20,7 @@ driver = webdriver.Firefox(executable_path='/src/utils/web_driver/geckodriver', 
 
 
 def amazon_scraper(url):
-    all_reviews = ""
+    all_reviews = []
 
     driver.get(url)
     time.sleep(1)
@@ -47,11 +47,14 @@ def amazon_scraper(url):
                 translation = review.find_element_by_class_name("cr-translated-review-content")
                 continue # Scrap only French comments
                 # BUG Translated reviews are empty
-                # all_reviews += f"{translation.text}<END>"
+                # all_reviews.append(translation.text)
                 # nb_review += 1
             except:
-                all_reviews += f"{review.text}<END>"
+                all_reviews.append(review.text)
                 nb_review += 1
+
+            # all_reviews.append(review.text)
+            # nb_review += 1
 
         if rest_of_data:
             driver.get(next_link)        

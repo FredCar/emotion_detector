@@ -1,5 +1,6 @@
 import re
 import random
+import time
 import tensorflow as tf
 from transformers import TFBertForSequenceClassification
 from transformers import BertTokenizer
@@ -10,13 +11,13 @@ from http_request_randomizer.requests.proxy.requestProxy import RequestProxy
 req_proxy = RequestProxy() #you may get different number of proxy when  you run this at each time
 proxies = req_proxy.get_proxy_list()
 
-# index = random.randint(0, len(proxies))
-# PROXY = proxies[index].get_address()
+index = random.randint(0, len(proxies))
+PROXY = proxies[index].get_address()
 
 
 class Preprocess:
     def __init__(self):
-        self.translator = Translator(raise_exception=False, proxies=proxies)
+        self.translator = Translator(raise_exception=False, proxies={"http": PROXY})
         self.tokenizer = BertTokenizer.from_pretrained('bert-base-uncased', do_lower_case=True)
 
         print("==================================")
@@ -38,34 +39,31 @@ class Preprocess:
 
     def translate(self, reviews):
         google_max_len = 5000
-        # reviews_list = reviews.split("<END>")[:-1]
 
-        translated = []
+        # If the length of review is short
+        if sum([len(i) for i in reviews]) < google_max_len:
+            reviews = "<END>".join(reviews)
+            translated = self.translator.translate(reviews, dest="en").text
+            translated = re.split("<END>|<END >|< END >|< END>", translated)
+            # print(f"\n\n\n\n\n >>>  SHORT  >>>>>>>>>> \t {len(reviews.split('<END>'))}/{len(translated)}")
+            return translated
+        
+        # If the length is too long for Google restriction
+        to_translate = []
+        translations = ""
+        for review in reviews:
+            total = sum([len(i) for i in to_translate]) + len(review)
+            if total > google_max_len:
+                translations += self.translator.translate("<END>".join(to_translate), dest="en").text + "<END>"
+                to_translate = []
+                # time.sleep(1)
 
-        translations = self.translator.translate(reviews, dest="en")
-        for translation in translations:
-            translated.append(translation.text)
+            to_translate.append(review)
+        
+        translations += self.translator.translate("<END>".join(to_translate), dest="en").text + "<END>"
 
-
-
-
-
-
-        # to_translate = ""
-        # translated = ""
-
-        # for review in reviews_list:
-        #     # HACK Split text to pass under the limit by number of character
-        #     if (len(to_translate) + len(review)) <= google_max_len:
-        #         to_translate += f"{review} <END> "
-        #     else:
-        #         translated += self.translator.translate(to_translate, dest="en").text
-        #         to_translate = f"{review} <END> "
-
-        # translated += self.translator.translate(to_translate, dest="en").text
-
-        # # BUG Translation don't work
-
+        translated = re.split("<END>|<END >|< END >|< END>", translations)[:-1]
+        # print(f"\n\n\n\n\n >>>  LONG  >>>>>>>>>> \t {len(reviews)}/{len(translated)}\n\n\n\n\n")
         return translated
 
 
@@ -148,7 +146,7 @@ class Model:
 
     
     def detailed_results(self, preds_list, phrases):
-        print(f"\t >>> preds_list >>> {len(preds_list)} <<<\n\t >>> phrases >>> {len(phrases)} <<<")
+        # print(f"\t >>> preds_list >>> {len(preds_list)} <<<\n\t >>> phrases >>> {len(phrases)} <<<")
         emotions_list = [x for x in self.emotions.keys()]
         
         detailed_results = {}

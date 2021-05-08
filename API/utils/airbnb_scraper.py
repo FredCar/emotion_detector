@@ -3,11 +3,20 @@ from selenium.webdriver.common.keys import Keys
 from bs4 import BeautifulSoup as bs
 import time
 import re
+import random
+from http_request_randomizer.requests.proxy.requestProxy import RequestProxy
+
+req_proxy = RequestProxy() #you may get different number of proxy when  you run this at each time
+proxies = req_proxy.get_proxy_list() #this will create proxy lis
+
+index = random.randint(0, len(proxies))
+PROXY = proxies[index].get_address()
 
 options=webdriver.FirefoxOptions()
 options.add_argument('-headless')
 options.add_argument('-nosandbox')
 options.add_argument('-disable-dev_shm_usage')
+options.add_argument(f'--proxy-server={PROXY}')
 
 driver = webdriver.Firefox(executable_path='/src/utils/web_driver/geckodriver', options=options)
 
@@ -26,6 +35,7 @@ def airbnb_scraper(url):
         comments = driver.find_elements_by_class_name("_1gjypya")
         if len(comments) >= nb_comments:
             break
+        # BUG Only 14 reviews are loaded, its maybe because the time is shorter ?!
         time.sleep(0.5)
 
     title = driver.title
@@ -35,11 +45,11 @@ def airbnb_scraper(url):
 
     comments = soupe.find_all("div", {"class": "_1gjypya"})
 
-    all_comments = ""
+    all_comments = []
     for c in comments:
         try:
             comment = c.find("span").text
-            all_comments += f"{comment}<END>"
+            all_comments.append(comment)
         except:
             print("ERROR : comment >>> ", c)
 

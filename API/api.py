@@ -47,6 +47,7 @@ class Query(db.Model):
     created_at = db.Column(db.DateTime, default=datetime.datetime.utcnow)
     title = db.Column(db.String(255), nullable=False)
     url = db.Column(db.Text)
+    # TODO Remove this field
     origin_text = db.Column(db.Text, nullable=False)
     best_result = db.Column(db.String(25), nullable=False)
     detailed_result = db.Column(db.Text, nullable=False)
@@ -178,39 +179,30 @@ def parse_url():
             return jsonify({"msg": "Adresse incorrecte !"}), 403
 
         if data["url"][:19] == "https://www.airbnb.":
-            all_comments_str, title = airbnb_scraper(data["url"])
+            all_comments_list, title = airbnb_scraper(data["url"])
         elif data["url"][:19] == "https://www.amazon.":
-            all_comments_str, title = amazon_scraper(data["url"])
-
-        all_comments_list = all_comments_str.split("<END>")[:-1]
+            all_comments_list, title = amazon_scraper(data["url"])
 
         # Translation of the reviews       
         translated_comments = preprocess.translate(all_comments_list)
-        # translated_comments = translated_comments.split("<END>")[:-1]
+
+        # # TODO Understand why translated_comments list is shorter than all_comments_list
+        # for x in translated_comments:
+        #     print(x)
+        #     print("=================================\n\n\n")
 
 
-
-        # TODO Understand why translated_comments list is shorter than all_comments_list
-        for x in translated_comments:
-            print(x)
-            print("=================================\n\n\n")
-
-
-        # HACK To avoid Index Error 
-        diff = len(all_comments_list) - len(translated_comments)
-        print(f"\n\n\n\t >>> \t DIFF = {diff} \t <<< \n\n\n")
-        if diff == 0:
-            pass
-        elif diff < 0: # translated_comments too long
-            for i in range(abs(diff)):
-                translated_comments.pop()
-        elif diff > 0: # all_comments_list too long
-            for i in range(abs(diff)):
-                all_comments_list.pop()
-
-
-
-
+        # # HACK To avoid Index Error 
+        # diff = len(all_comments_list) - len(translated_comments)
+        # print(f"\n\n\n\t >>> \t DIFF = {diff} \t <<< \n\n\n")
+        # if diff == 0:
+        #     pass
+        # elif diff < 0: # translated_comments too long
+        #     for i in range(abs(diff)):
+        #         translated_comments.pop()
+        # elif diff > 0: # all_comments_list too long
+        #     for i in range(abs(diff)):
+        #         all_comments_list.pop()
 
         tokens_list = preprocess.tokenize(translated_comments)
         preds_list = model.predict(tokens_list)
@@ -223,7 +215,7 @@ def parse_url():
         query = Query(
             title=title,
             url=data["url"],
-            origin_text=all_comments_str[:500],
+            origin_text= "aaa", # all_comments_str[:500],
             best_result=best_result,
             detailed_result=json.dumps(detailed_results),
             user=user
@@ -236,7 +228,7 @@ def parse_url():
             "url": data["url"],
             "best_result": str(best_result),
             "detailed_results": detailed_results,
-            "original_text": all_comments_str,
+            "original_text": "aaa",
             "translated_text": translated_comments,
             "phrases": all_comments_list,
             "sents": translated_comments,
