@@ -44,7 +44,7 @@ const Menu = ((pros) => {
             )
         } else {
             return (
-                <span className="nav-link"><strong>{userName}</strong> : Vous êtes connecté</span>
+                <a className="nav-link" href="/#account"><strong>{userName}</strong> : Votre compte</a>
             )
         }
     }
