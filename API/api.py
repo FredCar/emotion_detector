@@ -118,13 +118,21 @@ def account():
         user = User.query.filter_by(username=get_jwt_identity()["username"]).first()
         # print(f"\n\n\n\t>>>\t{user.query.url}\t<<<\n\n\n")
 
-        queries = Query.query.filter_by(user=user).all()
+        all_queries = Query.query.filter_by(user=user).all()
         # print(f"\n\n\n\t>>>\t{queries}\t<<<\n\n\n")
-        
+        queries = {}
+        i = 0
+        for query in all_queries:
+            queries[i] = {}
+            queries[i]["title"] = query.title
+            queries[i]["url"] = query.url
+            queries[i]["emotion"] = query.best_result
+            queries[i]["date"] = query.created_at
+            i += 1
+
         return jsonify({
-            "data": "TEESSSTTTT",
             "user": user.username,
-            # "queries": queries,
+            "queries": queries,
         })
 
 
