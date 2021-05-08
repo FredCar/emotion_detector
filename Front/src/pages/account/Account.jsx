@@ -26,7 +26,20 @@ const fetchData = (setData) => {
 }
 
 
-const AccountTable = () => {
+const AccountTable = ({data}) => {
+    let rows = []
+    for (const query in data?.queries) {
+        console.log(">>>>> : ", data.queries[query])
+        rows.push(
+            <TableRow>
+                <TableCell>{data.queries[query]["title"]}</TableCell>
+                <TableCell>{data.queries[query]["url"]}</TableCell>
+                <TableCell>{data.queries[query]["emotion"]}</TableCell>
+                <TableCell>{data.queries[query]["date"]}</TableCell>
+            </TableRow>
+        )
+    }
+
     return (
         <TableContainer component={Paper}>
             <Table>
@@ -39,7 +52,7 @@ const AccountTable = () => {
                     </TableRow>
                 </TableHead>
                 <TableBody>
-                    {/* {rows} */}
+                    {rows}
                 </TableBody>
             </Table>
         </TableContainer>
@@ -59,7 +72,7 @@ const Account = (props) => {
     return (
         <>
             <h1>Account</h1>
-            <AccountTable />
+            <AccountTable data={data} />
         </>
     )
 };
