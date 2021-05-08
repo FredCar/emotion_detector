@@ -47,10 +47,7 @@ class Query(db.Model):
     created_at = db.Column(db.DateTime, default=datetime.datetime.utcnow)
     title = db.Column(db.String(255), nullable=False)
     url = db.Column(db.Text)
-    # TODO Remove this field
-    origin_text = db.Column(db.Text, nullable=False)
     best_result = db.Column(db.String(25), nullable=False)
-    detailed_result = db.Column(db.Text, nullable=False)
     user_id = db.Column(db.Integer, db.ForeignKey("user.id"))
 
     def __repr__(self):
@@ -61,12 +58,12 @@ preprocess = Preprocess()
 model = Model()
 
 
-@app.route("/", methods=["GET"])
-@cross_origin()
-def home():
-    if request.method == "GET":
-        # res = User.query.all()
-        return {"message": ">>> GET <<<"}
+# @app.route("/", methods=["GET"])
+# @cross_origin()
+# def home():
+#     if request.method == "GET":
+#         # res = User.query.all()
+#         return {"message": ">>> GET <<<"}
 
 
 @app.route("/join", methods=["POST"])
@@ -112,27 +109,6 @@ def login():
             "access_token" : access_token,
         })
 
-
-# TODO A supprimer après tests
-# @app.route("/login", methods=["POST"])
-# def login():
-#     if request.method == "POST":
-#         data = json.loads(request.data)
-
-#         users = User.query.filter_by(email=data["email"], password=hash_password(data["password"])).all()
-#         if len(users) == 0:
-#             return jsonify({"msg": "Email ou mot de passe incorrect"}), 401
-#         # Ne devrait jamais se déclencher
-#         if len(users) > 1:
-#             return jsonify({"msg": "Erreur !!"}), 400
-
-#         user = users[0]
-#         access_token = create_access_token(identity={"email": user.email, "username": user.username})
-#         return jsonify({
-#             "msg": f"{user.username} : vous êtes bien connecté",
-#             "access_token" : access_token,
-#         })
-    
 
 @app.route("/parse_text", methods=["POST"])
 @jwt_required()
@@ -186,24 +162,6 @@ def parse_url():
         # Translation of the reviews       
         translated_comments = preprocess.translate(all_comments_list)
 
-        # # TODO Understand why translated_comments list is shorter than all_comments_list
-        # for x in translated_comments:
-        #     print(x)
-        #     print("=================================\n\n\n")
-
-
-        # # HACK To avoid Index Error 
-        # diff = len(all_comments_list) - len(translated_comments)
-        # print(f"\n\n\n\t >>> \t DIFF = {diff} \t <<< \n\n\n")
-        # if diff == 0:
-        #     pass
-        # elif diff < 0: # translated_comments too long
-        #     for i in range(abs(diff)):
-        #         translated_comments.pop()
-        # elif diff > 0: # all_comments_list too long
-        #     for i in range(abs(diff)):
-        #         all_comments_list.pop()
-
         tokens_list = preprocess.tokenize(translated_comments)
         preds_list = model.predict(tokens_list)
 
@@ -215,9 +173,7 @@ def parse_url():
         query = Query(
             title=title,
             url=data["url"],
-            origin_text= "aaa", # all_comments_str[:500],
             best_result=best_result,
-            detailed_result=json.dumps(detailed_results),
             user=user
         )
         db.session.add(query)
@@ -228,7 +184,7 @@ def parse_url():
             "url": data["url"],
             "best_result": str(best_result),
             "detailed_results": detailed_results,
-            "original_text": "aaa",
+            # "original_text": "aaa",
             "translated_text": translated_comments,
             "phrases": all_comments_list,
             "sents": translated_comments,
