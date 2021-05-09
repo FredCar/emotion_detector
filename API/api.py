@@ -146,8 +146,15 @@ def account():
 @jwt_required()
 @cross_origin()
 def detail(query_id):
+    user = User.query.filter_by(username=get_jwt_identity()["username"]).first()
+    query = Query.query.filter_by(user=user, id=int(query_id)).first()
+
     return jsonify({
-        "data": query_id,
+        "user": user.username,
+        "query": query.title,
+        "url": query.url,
+        "phrases": [r.review for r in query.results],
+        "detailed_result": {r.review: json.loads(r.score) for r in query.results},
     })
 
 
