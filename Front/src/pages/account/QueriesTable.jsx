@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { decodeToken } from "react-jwt";
 import axios from "axios";
 import Routing from "../../Routing";
 import Table from '@material-ui/core/Table';
@@ -29,6 +30,7 @@ const fetchData = (setData) => {
 
 const QueriesTable = (props) => {
     const [data, setData] = useState();
+    const userName = decodeToken(localStorage.getItem('access_token'))?.sub.username;
 
     useEffect(() => {
         fetchData(setData)
@@ -48,21 +50,24 @@ const QueriesTable = (props) => {
     }
 
     return (
-        <TableContainer component={Paper}>
-            <Table>
-                <TableHead>
-                    <TableRow>
-                        <TableCell>Titre</TableCell>
-                        <TableCell>URL</TableCell>
-                        <TableCell>Émotion</TableCell>
-                        <TableCell>Date</TableCell>
-                    </TableRow>
-                </TableHead>
-                <TableBody>
-                    {rows}
-                </TableBody>
-            </Table>
-        </TableContainer>
+        <>
+            <h3>Historique des requêtes de {userName}</h3>
+            <TableContainer component={Paper}>
+                <Table>
+                    <TableHead>
+                        <TableRow>
+                            <TableCell>Titre</TableCell>
+                            <TableCell>URL</TableCell>
+                            <TableCell>Émotion</TableCell>
+                            <TableCell>Date</TableCell>
+                        </TableRow>
+                    </TableHead>
+                    <TableBody>
+                        {rows}
+                    </TableBody>
+                </Table>
+            </TableContainer>
+        </>
     )
 };
 
