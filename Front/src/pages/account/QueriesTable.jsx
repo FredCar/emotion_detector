@@ -20,7 +20,6 @@ const fetchQueries = (setQueries) => {
 
     axios.get(url, config)
     .then(({data}) => {
-        console.log("DATA QUERIES", data.queries)
         setQueries(data.queries)
     })
     .catch((error) => {
@@ -29,7 +28,7 @@ const fetchQueries = (setQueries) => {
 }
 
 
-const fetchResults = (queryId, setResults) => {
+const fetchResults = (queryId, query, history) => {
     let url = `${Routing.baseUrl}/detail/${queryId}`
     let config = {
         headers: { Authorization: `Bearer ${localStorage.getItem('access_token')}` }
@@ -37,8 +36,20 @@ const fetchResults = (queryId, setResults) => {
 
     axios.get(url, config)
     .then(({data}) => {
-        // console.log("DATA RESULTS", data)
-        setResults(data)
+        const payload = {
+            "url": query.url,
+            "title": query.title,
+            "best_result": query.emotion,
+            "detailed_results": data.detailed_result,
+            "phrases": data.phrases,
+            "sents": [],
+        }
+    
+        // TODO Load good data
+        sessionStorage.setItem("data", JSON.stringify(payload))
+        sessionStorage.setItem("from", "url")
+    
+        history.push('result')
     })
     .catch((error) => {
         console.error(error)
@@ -49,46 +60,18 @@ const fetchResults = (queryId, setResults) => {
 const QueriesTable = (props) => {
     const history = useHistory();
     const [queries, setQueries] = useState();
-    const [results, setResults] = useState();
-    // const [queryId, setQueryId] = useState();
     const userName = decodeToken(localStorage.getItem('access_token'))?.sub.username;
 
     useEffect(() => {
         fetchQueries(setQueries)
     }, [])
 
-    // console.log("QUERIES : ", queries)
-
     const handleClick = (event) => {  
         let queryId = event.target.attributes.query_id.value
-        // console.log("|||||||||", queryId)      
-        let payload = {}
         for (const idx in queries) {
-            console.log("ttttttttt", queries[idx].id)
             if (queries[idx].id == queryId) {
-                // setQueryId(queries.queries[query].id)
-                console.log("A", queries[idx]["id"])
-                // const queryId = queries.queries[query].id
-                fetchResults(queryId, setResults)
-
-                // console.log("QUERY_ID ", queryId)
-
-                payload = {
-                    "url": queries[idx].url,
-                    "title": queries[idx].title,
-                    "best_result": queries[idx].emotion,
-                    "detailed_results": {},
-                    "phrases": [],
-                    "sents": [],
-                }
-
-                // TODO Load good data
-                sessionStorage.setItem("data", JSON.stringify(payload))
-                sessionStorage.setItem("from", "url")
-
-                history.push('result')
-            } else {
-                console.log("EEEEEZZZZZZZZZZ")
+                const query = queries[idx]
+                fetchResults(queryId, query, history)
             }
         }
     }
