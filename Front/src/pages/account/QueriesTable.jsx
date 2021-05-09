@@ -39,10 +39,21 @@ const QueriesTable = (props) => {
     }, [])
 
     const handleClick = (event) => {
+        let payload = {}
         for (const query in data?.queries) {
             if (data?.queries[query].title === event.target.text) {
-                sessionStorage.setItem("data", data?.queries[query])
-                // console.log("BAI : ", data?.queries[query])
+                payload = {
+                    "url": data.queries[query].url,
+                    "title": data.queries[query].title,
+                    "best_result": data.queries[query].emotion,
+                    "detailed_results": {},
+                    "phrases": [],
+                    "sents": [],
+                }
+
+                // TODO Load good data
+                sessionStorage.setItem("data", JSON.stringify(payload))
+                sessionStorage.setItem("from", "url")
 
                 history.push('result')
             }

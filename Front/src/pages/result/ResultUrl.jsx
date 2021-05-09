@@ -4,6 +4,7 @@ import ResultsTable from "./ResultsTable";
 import ResultsGraph from "./ResultsGraph";
 
 const ResultUrl = (props) => {
+    console.log("sessionStorage : ", JSON.parse(sessionStorage.getItem("data")))
     const data = JSON.parse(sessionStorage.getItem("data"))
 
     return (
