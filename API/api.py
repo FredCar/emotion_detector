@@ -141,6 +141,15 @@ def account():
         })
 
 
+@app.route("/detail/<query_id>", methods=["GET"])
+@jwt_required()
+@cross_origin()
+def detail(query_id):
+    return jsonify({
+        "data": query_id,
+    })
+
+
 @app.route("/parse_text", methods=["POST"])
 @jwt_required()
 @cross_origin()
