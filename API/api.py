@@ -1,5 +1,6 @@
 import re
 import datetime
+import emoji
 from flask import Flask, request, jsonify, json
 from flask_sqlalchemy import SQLAlchemy
 from flask_jwt_extended import create_access_token
@@ -68,14 +69,6 @@ class Result(db.Model):
 
 preprocess = Preprocess()
 model = Model()
-
-
-# @app.route("/", methods=["GET"])
-# @cross_origin()
-# def home():
-#     if request.method == "GET":
-#         # res = User.query.all()
-#         return {"message": ">>> GET <<<"}
 
 
 @app.route("/join", methods=["POST"])
@@ -215,6 +208,14 @@ def parse_url():
             user=user
         )
         db.session.add(query)
+
+        for review, score in detailed_results.items():
+            result = Result(
+                review=emoji.demojize(review),
+                score=json.dumps(score),
+                query=query
+            )
+            db.session.add(result)
         db.session.commit()
 
         data = {
@@ -222,7 +223,6 @@ def parse_url():
             "url": data["url"],
             "best_result": str(best_result),
             "detailed_results": detailed_results,
-            # "original_text": "aaa",
             "translated_text": translated_comments,
             "phrases": all_comments_list,
             "sents": translated_comments,
