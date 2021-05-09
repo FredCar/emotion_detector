@@ -50,8 +50,6 @@ const ResultsGraph = ({detailedResults, ...props}) => {
         data[label] = data[label] + 1
     }
 
-    console.log("data", data)
-
     return (
         <>
             <h4>Émotions reconnues dans les {numberOfComments} avis analysés</h4>

@@ -12,7 +12,7 @@ import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
 
 
-const fetchData = (setData) => {
+const fetchQueries = (setQueries) => {
     let url = `${Routing.baseUrl}/account`
     let config = {
         headers: { Authorization: `Bearer ${localStorage.getItem('access_token')}` }
@@ -20,8 +20,25 @@ const fetchData = (setData) => {
 
     axios.get(url, config)
     .then(({data}) => {
-        console.log("DATA", data)
-        setData(data)
+        console.log("DATA QUERIES", data.queries)
+        setQueries(data.queries)
+    })
+    .catch((error) => {
+        console.error(error)
+    })
+}
+
+
+const fetchResults = (queryId, setResults) => {
+    let url = `${Routing.baseUrl}/detail/${queryId}`
+    let config = {
+        headers: { Authorization: `Bearer ${localStorage.getItem('access_token')}` }
+    };
+
+    axios.get(url, config)
+    .then(({data}) => {
+        // console.log("DATA RESULTS", data)
+        setResults(data)
     })
     .catch((error) => {
         console.error(error)
@@ -31,21 +48,35 @@ const fetchData = (setData) => {
 
 const QueriesTable = (props) => {
     const history = useHistory();
-    const [data, setData] = useState();
+    const [queries, setQueries] = useState();
+    const [results, setResults] = useState();
+    // const [queryId, setQueryId] = useState();
     const userName = decodeToken(localStorage.getItem('access_token'))?.sub.username;
 
     useEffect(() => {
-        fetchData(setData)
+        fetchQueries(setQueries)
     }, [])
 
-    const handleClick = (event) => {
+    // console.log("QUERIES : ", queries)
+
+    const handleClick = (event) => {  
+        let queryId = event.target.attributes.query_id.value
+        // console.log("|||||||||", queryId)      
         let payload = {}
-        for (const query in data?.queries) {
-            if (data?.queries[query].title === event.target.text) {
+        for (const idx in queries) {
+            console.log("ttttttttt", queries[idx].id)
+            if (queries[idx].id == queryId) {
+                // setQueryId(queries.queries[query].id)
+                console.log("A", queries[idx]["id"])
+                // const queryId = queries.queries[query].id
+                fetchResults(queryId, setResults)
+
+                // console.log("QUERY_ID ", queryId)
+
                 payload = {
-                    "url": data.queries[query].url,
-                    "title": data.queries[query].title,
-                    "best_result": data.queries[query].emotion,
+                    "url": queries[idx].url,
+                    "title": queries[idx].title,
+                    "best_result": queries[idx].emotion,
                     "detailed_results": {},
                     "phrases": [],
                     "sents": [],
@@ -56,19 +87,21 @@ const QueriesTable = (props) => {
                 sessionStorage.setItem("from", "url")
 
                 history.push('result')
+            } else {
+                console.log("EEEEEZZZZZZZZZZ")
             }
         }
     }
 
     let rows = []
-    for (const query in data?.queries) {
+    for (const idx in queries) {
         rows.push(
             <TableRow>
-                <TableCell><a onClick={handleClick} >{data.queries[query]["title"]}</a></TableCell>
-                <TableCell><a href={data.queries[query]["url"]} target="_blank" rel="noreferrer" >{data.queries[query]["url"]}</a></TableCell>
-                <TableCell>{data.queries[query]["emotion"]}</TableCell>
+                <TableCell><a onClick={handleClick} query_id={queries[idx]["id"]} >{queries[idx]["title"]}</a></TableCell>
+                <TableCell><a href={queries[idx]["url"]} target="_blank" rel="noreferrer" >{queries[idx]["url"]}</a></TableCell>
+                <TableCell>{queries[idx]["emotion"]}</TableCell>
                 {/* TODO Format date */}
-                <TableCell>{data.queries[query]["date"]}</TableCell>
+                <TableCell>{queries[idx]["date"]}</TableCell>
             </TableRow>
         )
     }

@@ -130,6 +130,7 @@ def account():
         i = 0
         for query in all_queries:
             queries[i] = {}
+            queries[i]["id"] = query.id
             queries[i]["title"] = query.title
             queries[i]["url"] = query.url
             queries[i]["emotion"] = query.best_result
