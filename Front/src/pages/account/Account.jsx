@@ -33,7 +33,7 @@ const AccountTable = ({data}) => {
         rows.push(
             <TableRow>
                 <TableCell>{data.queries[query]["title"]}</TableCell>
-                <TableCell>{data.queries[query]["url"]}</TableCell>
+                <TableCell><a href={data.queries[query]["url"]} target="_blank" rel="noreferrer" >{data.queries[query]["url"]}</a></TableCell>
                 <TableCell>{data.queries[query]["emotion"]}</TableCell>
                 <TableCell>{data.queries[query]["date"]}</TableCell>
             </TableRow>

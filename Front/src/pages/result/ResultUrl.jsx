@@ -8,7 +8,7 @@ const ResultUrl = (props) => {
 
     return (
         <>
-            <h4><a href={data["url"]} target="_blank" >{data["title"]}</a></h4>
+            <h4><a href={data["url"]} target="_blank" rel="noreferrer" >{data["title"]}</a></h4>
             <br /> <br />
             <BestResult bestResult={data["best_result"]} />
             <br /> <br />
