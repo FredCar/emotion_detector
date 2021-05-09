@@ -29,6 +29,7 @@ jwt = JWTManager(app)
 app.config['CORS_HEADERS'] = 'Content-Type'
 app.config['SQLALCHEMY_DATABASE_URI'] = f'mysql://{config.MYSQL_USER}:{config.MYSQL_PASSWORD}@database/emotion_detector_db'
 app.config["JWT_SECRET_KEY"] = config.JWT_SECRET_KEY
+JWTTimeDelta = datetime.timedelta(days=1)
 
 
 class User(db.Model):
@@ -92,7 +93,7 @@ def join():
         db.session.add(user)
         db.session.commit()
 
-        access_token = create_access_token(identity={"email": data["email"], "username": data["username"]})
+        access_token = create_access_token(expires_delta=JWTTimeDelta, identity={"email": data["email"], "username": data["username"]})
         return jsonify({
             "msg": f"Compte de {data['username']} créé avec succés",
             "access_token": access_token,
@@ -108,7 +109,7 @@ def login():
         if user == None:
             return jsonify({"msg": "Email ou mot de passe incorrect"}), 401
 
-        access_token = create_access_token(identity={"email": user.email, "username": user.username})
+        access_token = create_access_token(expires_delta=JWTTimeDelta, identity={"email": user.email, "username": user.username})
         return jsonify({
             "msg": f"{user.username} : vous êtes bien connecté",
             "access_token" : access_token,
