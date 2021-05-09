@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { useHistory } from "react-router-dom";
 import { decodeToken } from "react-jwt";
 import axios from "axios";
 import Routing from "../../Routing";
@@ -29,6 +30,7 @@ const fetchData = (setData) => {
 
 
 const QueriesTable = (props) => {
+    const history = useHistory();
     const [data, setData] = useState();
     const userName = decodeToken(localStorage.getItem('access_token'))?.sub.username;
 
@@ -36,14 +38,25 @@ const QueriesTable = (props) => {
         fetchData(setData)
     }, [])
 
+    const handleClick = (event) => {
+        for (const query in data?.queries) {
+            if (data?.queries[query].title === event.target.text) {
+                sessionStorage.setItem("data", data?.queries[query])
+                // console.log("BAI : ", data?.queries[query])
+
+                history.push('result')
+            }
+        }
+    }
+
     let rows = []
     for (const query in data?.queries) {
-        console.log(">>>>> : ", data.queries[query])
         rows.push(
             <TableRow>
-                <TableCell>{data.queries[query]["title"]}</TableCell>
+                <TableCell><a onClick={handleClick} >{data.queries[query]["title"]}</a></TableCell>
                 <TableCell><a href={data.queries[query]["url"]} target="_blank" rel="noreferrer" >{data.queries[query]["url"]}</a></TableCell>
                 <TableCell>{data.queries[query]["emotion"]}</TableCell>
+                {/* TODO Format date */}
                 <TableCell>{data.queries[query]["date"]}</TableCell>
             </TableRow>
         )
@@ -51,7 +64,7 @@ const QueriesTable = (props) => {
 
     return (
         <>
-            <h3>Historique des requêtes de {userName}</h3>
+            <h3>Historique des requêtes de <strong>{userName}</strong></h3>
             <TableContainer component={Paper}>
                 <Table>
                     <TableHead>
