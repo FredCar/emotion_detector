@@ -26,4 +26,4 @@ Au cœur de l'application, elle est chargée de traiter les données, de les enr
 Une base de donnée relationnelle **MariaDB**.  
 
 - **Le dernier conteneur démarre le site**.   
-Réalisé avec **React** et accessible à l'adresse : [```localhost:5010```](localhost:5000).
+Réalisé avec **React** et accessible à l'adresse : [```localhost:5000```](localhost:5000).
