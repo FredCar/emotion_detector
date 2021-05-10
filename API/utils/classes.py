@@ -32,6 +32,10 @@ class Preprocess:
             original_text = original_text[1:]
         if original_text[-1] in quotes:
             original_text = original_text[:-1]
+
+        if original_text[-1] == ".":
+            original_text = original_text[:-1]
+
         clean_text = original_text
 
         return clean_text

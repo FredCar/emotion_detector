@@ -186,8 +186,7 @@ def parse_text():
         original_text = json.loads(original_text)
         clean_text = preprocess.clean(original_text["text"])
         phrases = re.split(r"[.|;|!|\?|\n]", clean_text)
-        translated_text = preprocess.translate(clean_text)
-        sents = re.split(r"[.|;|!|\?|\n]", translated_text)
+        sents = preprocess.translate(phrases)
         if "" in sents:
             sents.remove("")
 
@@ -200,7 +199,7 @@ def parse_text():
         data = {
             "best_result": str(best_result),
             "original_text": str(original_text["text"]),
-            "translated_text": str(translated_text),
+            "translated_text": ". ".join(sents),
             "phrases": phrases,
             "sents": sents,
             "detailed_results": detailed_results,
