@@ -159,6 +159,21 @@ def detail(query_id):
     })
 
 
+@app.route("/delete/<query_id>", methods=["DELETE"])
+@jwt_required()
+@cross_origin()
+def delete(query_id):
+    user = User.query.filter_by(username=get_jwt_identity()["username"]).first()
+    query = Query.query.filter_by(user=user, id=int(query_id)).first()
+
+    db.seesion.delete(query)
+    db.session.commit()
+    
+    return jsonify({
+        "msg": "Requête supprimée !"
+    }), 200
+
+
 @app.route("/parse_text", methods=["POST"])
 @jwt_required()
 @cross_origin()
