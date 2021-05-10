@@ -178,8 +178,8 @@ def delete(query_id):
 
 
 @app.route("/parse_text", methods=["POST"])
-@jwt_required(optional=False)
-@cross_origin()
+@jwt_required(optional=True)
+# @cross_origin()
 def parse_text():
     if request.method == "POST": 
         original_text = request.data
@@ -195,6 +195,31 @@ def parse_text():
 
         best_result = model.best_result(preds_list)
         detailed_results = model.detailed_results(preds_list, phrases)
+
+        # If user is logged
+        if get_jwt_identity():
+            # Insertion in db
+            user = User.query.filter_by(username=get_jwt_identity()["username"]).first()
+            if len(clean_text) > 200:
+                title = clean_text[:200]
+            else:
+                title = clean_text
+
+            query = Query(
+                title=title,
+                best_result=best_result,
+                user=user
+            )
+            db.session.add(query)
+
+            for review, score in detailed_results.items():
+                result = Result(
+                    review=emoji.demojize(review),
+                    score=json.dumps(score),
+                    query=query
+                )
+                db.session.add(result)
+            db.session.commit()
 
         data = {
             "best_result": str(best_result),
