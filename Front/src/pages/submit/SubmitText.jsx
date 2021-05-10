@@ -38,7 +38,6 @@ const SubmitText = (({setAlert}) => {
 
         axios.post(url, data, config)
         .then(({data}) => {
-            console.log("DATA", data.data)
             sessionStorage.setItem("data", JSON.stringify(data.data))
             sessionStorage.setItem("from", "text")
             history.push("/result")

@@ -85,7 +85,9 @@ const deleteQuery = (deleteId, setAlert) => {
     axios.delete(url, config)
     .then((resp) => {
         console.log("Deleted with success !", resp)
-        setAlert(["success", "Suppression réussie"])
+        sessionStorage.setItem("alert_severity", "success")
+        sessionStorage.setItem("alert", "Suppression réussie")
+        document.location.reload();
     })
     .catch((error) => {
         console.error(error)
@@ -99,11 +101,20 @@ const QueriesTable = (props) => {
     const history = useHistory();
     const [alert, setAlert] = useState([]);
     const [queries, setQueries] = useState();
-    // const [deleteId, setDeleteId] = useState();
     const userName = decodeToken(localStorage.getItem('access_token'))?.sub.username;
 
     useEffect(() => {
         fetchQueries(setQueries)
+    }, [])
+
+    useEffect(() => {
+        const passedAlertSeverity = sessionStorage.getItem("alert_severity")
+        const passedAlert = sessionStorage.getItem("alert")
+        if (passedAlertSeverity && passedAlert) {
+            setAlert([passedAlertSeverity, passedAlert])
+            sessionStorage.removeItem("alert")
+            sessionStorage.removeItem("alert_severity")
+        }
     }, [])
 
     const handleClick = (event) => {  
@@ -122,22 +133,6 @@ const QueriesTable = (props) => {
 
         console.log("DELETE ID >>> ", event.target)
         deleteQuery(deleteId, setAlert)
-        // setDeleteId(deleteId) // Test pour le refresh
-
-        // let url = `${Routing.baseUrl}/delete/${queryId}`
-        // let config = {
-        //     headers: { Authorization: `Bearer ${localStorage.getItem('access_token')}` }
-        // };
-
-        // axios.delete(url, config)
-        // .then((resp) => {
-        //     console.log("Deleted with success !", resp)
-        //     history.push('account')
-
-        // })
-        // .catch((error) => {
-        //     console.error(error)
-        // })
     }
 
     let rows = []
