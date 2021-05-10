@@ -10,7 +10,19 @@ import TableContainer from '@material-ui/core/TableContainer';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
-import {DeleteForeverIcon} from '@material-ui/icons';
+import DeleteForeverIcon from '@material-ui/icons/DeleteForever';
+import { makeStyles } from "@material-ui/core/styles";
+
+const useStyle = makeStyles({
+    deleteCell: {
+        textAlign: "center",
+    },
+    delete: {
+        color: "red",
+        fontSize: 30,
+
+    },
+})
 
 
 const fetchQueries = (setQueries) => {
@@ -59,6 +71,7 @@ const fetchResults = (queryId, query, history) => {
 
 
 const QueriesTable = (props) => {
+    const styles = useStyle();
     const history = useHistory();
     const [queries, setQueries] = useState();
     const userName = decodeToken(localStorage.getItem('access_token'))?.sub.username;
@@ -86,7 +99,7 @@ const QueriesTable = (props) => {
                 <TableCell>{queries[idx]["emotion"]}</TableCell>
                 {/* TODO Format date */}
                 <TableCell>{queries[idx]["date"]}</TableCell>
-                <TableCell><DeleteForeverIcon /></TableCell>
+                <TableCell className={styles.deleteCell}><DeleteForeverIcon className={styles.delete} /></TableCell>
             </TableRow>
         )
     }
