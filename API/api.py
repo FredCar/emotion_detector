@@ -166,9 +166,12 @@ def delete(query_id):
     user = User.query.filter_by(username=get_jwt_identity()["username"]).first()
     query = Query.query.filter_by(user=user, id=int(query_id)).first()
 
-    db.seesion.delete(query)
+    for result in query.results:
+        db.session.delete(result)
+
+    db.session.delete(query)
     db.session.commit()
-    
+
     return jsonify({
         "msg": "Requête supprimée !"
     }), 200
