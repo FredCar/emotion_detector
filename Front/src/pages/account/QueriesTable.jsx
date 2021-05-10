@@ -3,6 +3,7 @@ import { useHistory } from "react-router-dom";
 import { decodeToken } from "react-jwt";
 import axios from "axios";
 import Routing from "../../Routing";
+import Alert from '@material-ui/lab/Alert';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
@@ -11,6 +12,7 @@ import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
 import DeleteForeverIcon from '@material-ui/icons/DeleteForever';
+import Button from '@material-ui/core/Button';
 import { makeStyles } from "@material-ui/core/styles";
 
 const useStyle = makeStyles({
@@ -20,7 +22,11 @@ const useStyle = makeStyles({
     delete: {
         color: "red",
         fontSize: 30,
-
+    },
+    alert: {
+        width: 800,
+        margin: "auto",
+        marginBottom: 20,
     },
 })
 
@@ -70,10 +76,30 @@ const fetchResults = (queryId, query, history) => {
 }
 
 
+const deleteQuery = (deleteId, setAlert) => {
+    let url = `${Routing.baseUrl}/delete/${deleteId}`
+    let config = {
+        headers: { Authorization: `Bearer ${localStorage.getItem('access_token')}` }
+    };
+
+    axios.delete(url, config)
+    .then((resp) => {
+        console.log("Deleted with success !", resp)
+        setAlert(["success", "Suppression réussie"])
+    })
+    .catch((error) => {
+        console.error(error)
+        setAlert(["error", "Echec de la suppression"])
+    })
+}
+
+
 const QueriesTable = (props) => {
-    const styles = useStyle();
+    const classes = useStyle();
     const history = useHistory();
+    const [alert, setAlert] = useState([]);
     const [queries, setQueries] = useState();
+    // const [deleteId, setDeleteId] = useState();
     const userName = decodeToken(localStorage.getItem('access_token'))?.sub.username;
 
     useEffect(() => {
@@ -90,6 +116,30 @@ const QueriesTable = (props) => {
         }
     }
 
+    const handleDelete = (event) => {
+        // BUG Parfois undefined !! POURQUOI ??
+        let deleteId = event.target.attributes.delete_id?.value
+
+        console.log("DELETE ID >>> ", event.target)
+        deleteQuery(deleteId, setAlert)
+        // setDeleteId(deleteId) // Test pour le refresh
+
+        // let url = `${Routing.baseUrl}/delete/${queryId}`
+        // let config = {
+        //     headers: { Authorization: `Bearer ${localStorage.getItem('access_token')}` }
+        // };
+
+        // axios.delete(url, config)
+        // .then((resp) => {
+        //     console.log("Deleted with success !", resp)
+        //     history.push('account')
+
+        // })
+        // .catch((error) => {
+        //     console.error(error)
+        // })
+    }
+
     let rows = []
     for (const idx in queries) {
         rows.push(
@@ -99,13 +149,24 @@ const QueriesTable = (props) => {
                 <TableCell>{queries[idx]["emotion"]}</TableCell>
                 {/* TODO Format date */}
                 <TableCell>{queries[idx]["date"]}</TableCell>
-                <TableCell className={styles.deleteCell}><DeleteForeverIcon className={styles.delete} /></TableCell>
+                <TableCell className={classes.deleteCell}>
+                    <Button variant="contained" onClick={handleDelete} delete_id={queries[idx]["id"]} >
+                        <DeleteForeverIcon className={classes.delete} delete_id={queries[idx]["id"]} />
+                    </Button>
+                </TableCell>
             </TableRow>
         )
     }
 
     return (
         <>
+            {
+                alert.length > 0 && <>
+                <Alert severity={alert[0]} className={classes.alert} >
+                    {alert[1]}
+                </Alert>
+                </>
+            }
             <h3>Historique des requêtes de <strong>{userName}</strong></h3>
             <TableContainer component={Paper}>
                 <Table>
