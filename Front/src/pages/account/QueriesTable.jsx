@@ -10,6 +10,7 @@ import TableContainer from '@material-ui/core/TableContainer';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
+import {DeleteForeverIcon} from '@material-ui/icons';
 
 
 const fetchQueries = (setQueries) => {
@@ -85,6 +86,7 @@ const QueriesTable = (props) => {
                 <TableCell>{queries[idx]["emotion"]}</TableCell>
                 {/* TODO Format date */}
                 <TableCell>{queries[idx]["date"]}</TableCell>
+                <TableCell><DeleteForeverIcon /></TableCell>
             </TableRow>
         )
     }
@@ -100,6 +102,7 @@ const QueriesTable = (props) => {
                             <TableCell>URL</TableCell>
                             <TableCell>Émotion</TableCell>
                             <TableCell>Date</TableCell>
+                            <TableCell>Supprimer</TableCell>
                         </TableRow>
                     </TableHead>
                     <TableBody>
