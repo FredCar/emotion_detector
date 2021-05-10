@@ -178,7 +178,7 @@ def delete(query_id):
 
 
 @app.route("/parse_text", methods=["POST"])
-@jwt_required()
+@jwt_required(optional=False)
 @cross_origin()
 def parse_text():
     if request.method == "POST": 
@@ -210,7 +210,7 @@ def parse_text():
 
 
 @app.route("/parse_url", methods=["POST"])
-@jwt_required()
+@jwt_required(optional=True)
 # @cross_origin()
 def parse_url():
     if request.method == "POST":
@@ -234,24 +234,26 @@ def parse_url():
         best_result = model.best_result(preds_list)
         detailed_results = model.detailed_results(preds_list, all_comments_list)
 
-        # Insertion in db
-        user = User.query.filter_by(username=get_jwt_identity()["username"]).first()
-        query = Query(
-            title=title,
-            url=data["url"],
-            best_result=best_result,
-            user=user
-        )
-        db.session.add(query)
-
-        for review, score in detailed_results.items():
-            result = Result(
-                review=emoji.demojize(review),
-                score=json.dumps(score),
-                query=query
+        # If user is logged
+        if get_jwt_identity():
+            # Insertion in db
+            user = User.query.filter_by(username=get_jwt_identity()["username"]).first()
+            query = Query(
+                title=title,
+                url=data["url"],
+                best_result=best_result,
+                user=user
             )
-            db.session.add(result)
-        db.session.commit()
+            db.session.add(query)
+
+            for review, score in detailed_results.items():
+                result = Result(
+                    review=emoji.demojize(review),
+                    score=json.dumps(score),
+                    query=query
+                )
+                db.session.add(result)
+            db.session.commit()
 
         data = {
             "title": title,
