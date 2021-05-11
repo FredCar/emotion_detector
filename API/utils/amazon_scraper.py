@@ -53,9 +53,6 @@ def amazon_scraper(url):
                 all_reviews.append(review.text)
                 nb_review += 1
 
-            # all_reviews.append(review.text)
-            # nb_review += 1
-
         if rest_of_data:
             driver.get(next_link)        
         time.sleep(1)

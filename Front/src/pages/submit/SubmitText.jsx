@@ -28,13 +28,18 @@ const SubmitText = (({setAlert}) => {
     const handleSubmit = (() => {
         setAlert([])
         setIsLoading(true)
+        let token = localStorage.getItem('access_token')
         let url = `${Routing.baseUrl}/parse_text`
         let data = {
             "text" : text,
         };
-        let config = {
-            headers: { Authorization: `Bearer ${localStorage.getItem('access_token')}` }
-        };
+        
+        let config = {}
+        if (token) {
+            config = {
+                headers: { Authorization: `Bearer ${token}` }
+            };
+        }
 
         axios.post(url, data, config)
         .then(({data}) => {
