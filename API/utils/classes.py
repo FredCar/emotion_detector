@@ -8,9 +8,8 @@ from googletrans import Translator
 from http_request_randomizer.requests.proxy.requestProxy import RequestProxy
 
 
-req_proxy = RequestProxy() #you may get different number of proxy when  you run this at each time
+req_proxy = RequestProxy()
 proxies = req_proxy.get_proxy_list()
-
 index = random.randint(0, len(proxies))
 PROXY = proxies[index].get_address()
 
@@ -26,7 +25,6 @@ class Preprocess:
 
 
     def clean(self, original_text):
-        # TODO Gérer les "..."
         quotes = ["'", '"']
         if original_text[0] in quotes:
             original_text = original_text[1:]
@@ -49,7 +47,6 @@ class Preprocess:
             reviews = "<END>".join(reviews)
             translated = self.translator.translate(reviews, dest="en").text
             translated = re.split("<END>|<END >|< END >|< END>", translated)
-            # print(f"\n\n\n\n\n >>>  SHORT  >>>>>>>>>> \t {len(reviews.split('<END>'))}/{len(translated)}")
             return translated
         
         # If the length is too long for Google restriction
@@ -60,14 +57,12 @@ class Preprocess:
             if total > google_max_len:
                 translations += self.translator.translate("<END>".join(to_translate), dest="en").text + "<END>"
                 to_translate = []
-                # time.sleep(1)
 
             to_translate.append(review)
         
         translations += self.translator.translate("<END>".join(to_translate), dest="en").text + "<END>"
 
         translated = re.split("<END>|<END >|< END >|< END>", translations)[:-1]
-        # print(f"\n\n\n\n\n >>>  LONG  >>>>>>>>>> \t {len(reviews)}/{len(translated)}\n\n\n\n\n")
         return translated
 
 
@@ -77,7 +72,7 @@ class Preprocess:
             tokenized = self.tokenizer.encode_plus(
                 sent,
                 add_special_tokens = True,
-                max_length = 30,
+                max_length = 150,
                 pad_to_max_length = True, 
                 return_attention_mask = True
             )
@@ -121,7 +116,6 @@ class Model:
         preds_list = []
         for token in tokens_list:
             pred = self.model.predict([token["input_ids"], token["attention_mask"]], batch_size=32)
-            # TODO Comprendre ce qu'est la 2eme liste retournée dans "logits"
             preds_list.append(pred["logits"][0])
             
         return preds_list
@@ -150,7 +144,6 @@ class Model:
 
     
     def detailed_results(self, preds_list, phrases):
-        # print(f"\t >>> preds_list >>> {len(preds_list)} <<<\n\t >>> phrases >>> {len(phrases)} <<<")
         emotions_list = [x for x in self.emotions.keys()]
         
         detailed_results = {}

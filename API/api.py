@@ -18,13 +18,14 @@ from utils.airbnb_scraper import *
 from utils.amazon_scraper import *
 
 
+# =============================
+#          CONFIG
+# =============================
 app = Flask(__name__)
-
 
 cors = CORS(app)
 db = SQLAlchemy(app)
 jwt = JWTManager(app)
-
 
 app.config['CORS_HEADERS'] = 'Content-Type'
 app.config['SQLALCHEMY_DATABASE_URI'] = f'mysql://{config.MYSQL_USER}:{config.MYSQL_PASSWORD}@database/emotion_detector_db'
@@ -32,6 +33,9 @@ app.config["JWT_SECRET_KEY"] = config.JWT_SECRET_KEY
 JWTTimeDelta = datetime.timedelta(days=1)
 
 
+# =============================
+#          ENTITIES
+# =============================
 class User(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(80), unique=True, nullable=False)
@@ -71,7 +75,9 @@ class Result(db.Model):
 preprocess = Preprocess()
 model = Model()
 
-
+# =============================
+#          ROUTES
+# =============================
 @app.route("/join", methods=["POST"])
 @cross_origin()
 def join():
@@ -118,14 +124,11 @@ def login():
 
 @app.route("/account", methods=["GET"])
 @jwt_required()
-# @cross_origin()
 def account():
     if request.method == "GET":
         user = User.query.filter_by(username=get_jwt_identity()["username"]).first()
-        # print(f"\n\n\n\t>>>\t{user.query.url}\t<<<\n\n\n")
-
         all_queries = Query.query.filter_by(user=user).all()
-        # print(f"\n\n\n\t>>>\t{queries}\t<<<\n\n\n")
+
         queries = {}
         i = 0
         for query in all_queries:
@@ -179,7 +182,6 @@ def delete(query_id):
 
 @app.route("/parse_text", methods=["POST"])
 @jwt_required(optional=True)
-# @cross_origin()
 def parse_text():
     if request.method == "POST": 
         original_text = request.data
@@ -236,7 +238,6 @@ def parse_text():
 
 @app.route("/parse_url", methods=["POST"])
 @jwt_required(optional=True)
-# @cross_origin()
 def parse_url():
     if request.method == "POST":
         data = json.loads(request.data)
