@@ -4,24 +4,28 @@ import re
 import random
 from http_request_randomizer.requests.proxy.requestProxy import RequestProxy
 
-req_proxy = RequestProxy() #you may get different number of proxy when  you run this at each time
-proxies = req_proxy.get_proxy_list() #this will create proxy lis
+req_proxy = RequestProxy()
+proxies = req_proxy.get_proxy_list()
 
-index = random.randint(0, len(proxies))
-PROXY = proxies[index].get_address()
 
-options = webdriver.FirefoxOptions()
-options.add_argument('-headless')
-options.add_argument('-nosandbox')
-options.add_argument('-disable-dev_shm_usage')
-options.add_argument(f'--proxy-server={PROXY}')
+def start_webdriver():
+    index = random.randint(0, len(proxies))
+    PROXY = proxies[index].get_address()
 
-driver = webdriver.Firefox(executable_path='/src/utils/web_driver/geckodriver', options=options)
+    options = webdriver.FirefoxOptions()
+    options.add_argument('-headless')
+    options.add_argument('-nosandbox')
+    options.add_argument('-disable-dev_shm_usage')
+    options.add_argument(f'--proxy-server={PROXY}')
+
+    driver = webdriver.Firefox(executable_path='/src/utils/web_driver/geckodriver', options=options)
+    return driver
 
 
 def amazon_scraper(url):
     all_reviews = []
 
+    driver = start_webdriver()
     driver.get(url)
     time.sleep(1)
 
@@ -29,8 +33,8 @@ def amazon_scraper(url):
 
     rest_of_data = True
     nb_review = 0
-    # TODO Raise the limitation of number caused by DB limitation for detailledResults
-    while rest_of_data and nb_review < 150:
+    # The limitation of number is because the time is too long
+    while rest_of_data and nb_review < 250:
         reviews = []
         try:
             next_link = driver.find_element_by_class_name("a-last")

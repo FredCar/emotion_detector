@@ -6,23 +6,26 @@ import re
 import random
 from http_request_randomizer.requests.proxy.requestProxy import RequestProxy
 
-req_proxy = RequestProxy() #you may get different number of proxy when  you run this at each time
-proxies = req_proxy.get_proxy_list() #this will create proxy lis
+req_proxy = RequestProxy() 
+proxies = req_proxy.get_proxy_list()
 
-index = random.randint(0, len(proxies))
-PROXY = proxies[index].get_address()
+def start_webdriver():
+    index = random.randint(0, len(proxies))
+    PROXY = proxies[index].get_address()
 
-options=webdriver.FirefoxOptions()
-options.add_argument('-headless')
-options.add_argument('-nosandbox')
-options.add_argument('-disable-dev_shm_usage')
-options.add_argument(f'--proxy-server={PROXY}')
+    options = webdriver.FirefoxOptions()
+    options.add_argument('-headless')
+    options.add_argument('-nosandbox')
+    options.add_argument('-disable-dev_shm_usage')
+    options.add_argument(f'--proxy-server={PROXY}')
 
-driver = webdriver.Firefox(executable_path='/src/utils/web_driver/geckodriver', options=options)
+    driver = webdriver.Firefox(executable_path='/src/utils/web_driver/geckodriver', options=options)
+    return driver
 
 
 def airbnb_scraper(url):
     # TODO Aller chercher le lien des commentaires depuis la page principale de l'annoce
+    driver = start_webdriver()
     driver.get(url)
     time.sleep(5)
     dialog = driver.find_element_by_class_name("_1v5ksyp")

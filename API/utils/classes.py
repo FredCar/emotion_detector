@@ -13,10 +13,12 @@ proxies = req_proxy.get_proxy_list()
 index = random.randint(0, len(proxies))
 PROXY = proxies[index].get_address()
 
+PROXY_LIST = {"http": prox for prox in proxies}
+
 
 class Preprocess:
     def __init__(self):
-        self.translator = Translator(raise_exception=False, proxies={"http": PROXY})
+        self.translator = Translator(raise_exception=False, proxies=PROXY_LIST)
         self.tokenizer = BertTokenizer.from_pretrained('bert-base-uncased', do_lower_case=True)
 
         print("==================================")
@@ -40,6 +42,9 @@ class Preprocess:
 
 
     def translate(self, reviews):
+        # BUG Le proxy ne se réinitialise pas à chaque reqûete !!
+        # TODO Comment dépasser les limitations de Google
+        # self.translator = Translator(raise_exception=False, proxies={"http": proxies[random.randint(0, len(proxies))].get_address()})
         google_max_len = 5000
 
         # If the length of review is short
