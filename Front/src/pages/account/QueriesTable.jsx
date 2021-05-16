@@ -84,9 +84,9 @@ const deleteQuery = (deleteId, setAlert) => {
 
     axios.delete(url, config)
     .then((resp) => {
-        console.log("Deleted with success !", resp)
         sessionStorage.setItem("alert_severity", "success")
         sessionStorage.setItem("alert", "Suppression réussie")
+        // HACK Force te reload because the state change is not alwais detected
         document.location.reload();
     })
     .catch((error) => {
@@ -130,8 +130,6 @@ const QueriesTable = (props) => {
     const handleDelete = (event) => {
         // BUG Parfois undefined !! POURQUOI ??
         let deleteId = event.target.attributes.delete_id?.value
-
-        console.log("DELETE ID >>> ", event.target)
         deleteQuery(deleteId, setAlert)
     }
 

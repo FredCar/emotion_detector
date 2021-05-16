@@ -15,13 +15,6 @@ const useStyles = makeStyles({
 const ResultText = ((props) => {
     const classes = useStyles();
     const data = JSON.parse(sessionStorage.getItem("data"))
-    // data["all_results"] = JSON.parse(data["all_results"])
-
-    // console.log("data", typeof data["all_results"])
-
-    // for (const res in data["all_results"]) {
-    //     console.log("res", res, data["all_results"][res])
-    // }
 
     return (
         <>
@@ -31,7 +24,6 @@ const ResultText = ((props) => {
             <br /> <br />
             <ResultsTable detailedResults={data["detailed_results"]} phrases={data["phrases"]} sents={data["sents"]} />
             <br /> <br />
-            {data["sents"]}
         </>
     )
 })
