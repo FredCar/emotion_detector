@@ -64,7 +64,6 @@ const fetchResults = (queryId, query, history) => {
             "sents": [],
         }
     
-        // TODO Load good data
         sessionStorage.setItem("data", JSON.stringify(payload))
         sessionStorage.setItem("from", "url")
     

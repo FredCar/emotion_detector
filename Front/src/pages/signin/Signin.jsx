@@ -87,8 +87,7 @@ const Signin = (props) => {
                         </label>
                         <label>
                             Email : 
-                            {/* TODO Remettre type="email" */}
-                            <input type="texte" className={classes.input} onChange={(e) => setEmail(e.target.value)} />
+                            <input type="email" className={classes.input} onChange={(e) => setEmail(e.target.value)} />
                         </label>
                         <label>
                             Mot de passe : 
