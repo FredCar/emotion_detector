@@ -75,6 +75,7 @@ class Result(db.Model):
 preprocess = Preprocess()
 model = Model()
 
+
 # =============================
 #          ROUTES
 # =============================
@@ -99,6 +100,7 @@ def join():
         db.session.add(user)
         db.session.commit()
 
+        # Generate a Token
         access_token = create_access_token(expires_delta=JWTTimeDelta, identity={"email": data["email"], "username": data["username"]})
         return jsonify({
             "msg": f"Compte de {data['username']} créé avec succés",
@@ -111,6 +113,7 @@ def login():
     if request.method == "POST":
         data = json.loads(request.data)
 
+        # Search the user in DB
         user = User.query.filter_by(email=data["email"], password=hash_password(data["password"])).first()
         if user == None:
             return jsonify({"msg": "Email ou mot de passe incorrect"}), 401

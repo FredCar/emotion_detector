@@ -10,6 +10,8 @@ req_proxy = RequestProxy()
 proxies = req_proxy.get_proxy_list()
 
 def start_webdriver():
+    ''' Initialize the webdriver with a new proxy on each call '''
+
     index = random.randint(0, len(proxies))
     PROXY = proxies[index].get_address()
 
@@ -24,6 +26,8 @@ def start_webdriver():
 
 
 def airbnb_scraper(url):
+    ''' Scrap Airbnb website '''
+
     # TODO Aller chercher le lien des commentaires depuis la page principale de l'annoce
     driver = start_webdriver()
     driver.get(url)
@@ -38,12 +42,10 @@ def airbnb_scraper(url):
         comments = driver.find_elements_by_class_name("_1gjypya")
         if len(comments) >= nb_comments:
             break
-        # BUG Only 14 reviews are loaded, its maybe because the time is shorter ?!
         time.sleep(0.5)
 
     title = driver.title
     html = driver.page_source
-    # TODO Faire sans BeautifulSoup
     soupe = bs(html, "html.parser")
 
     comments = soupe.find_all("div", {"class": "_1gjypya"})

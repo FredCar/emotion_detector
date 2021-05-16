@@ -9,6 +9,8 @@ proxies = req_proxy.get_proxy_list()
 
 
 def start_webdriver():
+    ''' Initialize the webdriver with a new proxy on each call '''
+
     index = random.randint(0, len(proxies))
     PROXY = proxies[index].get_address()
 
@@ -23,6 +25,8 @@ def start_webdriver():
 
 
 def amazon_scraper(url):
+    ''' Scrap Amazon website '''
+    
     all_reviews = []
 
     driver = start_webdriver()
