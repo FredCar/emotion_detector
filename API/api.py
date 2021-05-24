@@ -11,6 +11,8 @@ from flask_cors import CORS, cross_origin
 import tensorflow as tf
 from transformers import TFBertForSequenceClassification
 from transformers import BertTokenizer
+import sentry_sdk
+from sentry_sdk.integrations.flask import FlaskIntegration
 from utils import config
 from utils.classes import *
 from utils.functions import *
@@ -21,6 +23,16 @@ from utils.amazon_scraper import *
 # =============================
 #          CONFIG
 # =============================
+sentry_sdk.init(
+    dsn="https://b94402c3a7d7499784abf207786ccd40@o571413.ingest.sentry.io/5780931",
+    integrations=[FlaskIntegration()],
+
+    # Set traces_sample_rate to 1.0 to capture 100%
+    # of transactions for performance monitoring.
+    # We recommend adjusting this value in production.
+    traces_sample_rate=1.0
+)
+
 app = Flask(__name__)
 
 cors = CORS(app)
@@ -79,6 +91,12 @@ model = Model()
 # =============================
 #          ROUTES
 # =============================
+# Test Sentry
+@app.route('/debug-sentry')
+def trigger_error():
+    division_by_zero = 1 / 0
+
+
 @app.route("/join", methods=["POST"])
 @cross_origin()
 def join():
