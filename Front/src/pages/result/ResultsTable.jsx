@@ -25,7 +25,7 @@ const ResultsTable = ({detailedResults, phrases, sents}) => {
 
         rows.push(
             <TableRow>
-                <TableCell ><strong>{phrases[i]}</strong> - - {sents[i]}</TableCell>
+                <TableCell ><strong>{phrases[i]}</strong></TableCell>
                 {column}
             </TableRow>
         )

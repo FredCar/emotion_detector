@@ -38,7 +38,7 @@ def amazon_scraper(url):
     rest_of_data = True
     nb_review = 0
     # The limitation of number is because the time is too long
-    while rest_of_data and nb_review < 250:
+    while rest_of_data and nb_review < 10:
         reviews = []
         try:
             next_link = driver.find_element_by_class_name("a-last")
